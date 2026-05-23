@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "down": "dungeontidbits:block/room_gateway_bottom",
+    "east": "dungeontidbits:block/room_gateway_side",
+    "north": "dungeontidbits:block/room_gateway_face",
+    "particle": "dungeontidbits:block/room_gateway_side",
+    "south": "dungeontidbits:block/room_gateway_side",
+    "up": "dungeontidbits:block/room_gateway_top",
+    "west": "dungeontidbits:block/room_gateway_side"
+  }
+}

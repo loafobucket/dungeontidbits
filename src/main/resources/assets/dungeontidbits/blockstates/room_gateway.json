@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "dungeontidbits:block/room_gateway",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "dungeontidbits:block/room_gateway"
+    },
+    "facing=south": {
+      "model": "dungeontidbits:block/room_gateway",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "dungeontidbits:block/room_gateway",
+      "y": 270
+    }
+  }
+}

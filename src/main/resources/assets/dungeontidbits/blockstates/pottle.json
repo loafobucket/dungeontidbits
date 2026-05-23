@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "dungeontidbits:block/pottle",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "dungeontidbits:block/pottle"
+    },
+    "facing=south": {
+      "model": "dungeontidbits:block/pottle",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "dungeontidbits:block/pottle",
+      "y": 270
+    }
+  }
+}
