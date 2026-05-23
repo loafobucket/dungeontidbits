@@ -1,5 +1,8 @@
 package com.loafobucket.dungeontidbits;
 
+import com.loafobucket.dungeontidbits.block.ModBlocks;
+import com.loafobucket.dungeontidbits.item.ModItems;
+import net.minecraft.world.item.CreativeModeTabs;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
@@ -25,6 +28,9 @@ public class DungeonTidbits {
 
         NeoForge.EVENT_BUS.register(this);
 
+        ModItems.register(modEventBus);
+        ModBlocks.register(modEventBus);
+
         modEventBus.addListener(this::addCreative);
 
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
@@ -35,7 +41,9 @@ public class DungeonTidbits {
     }
 
     private void addCreative(BuildCreativeModeTabContentsEvent event) {
-
+        if(event.getTabKey() == CreativeModeTabs.INGREDIENTS) {
+            event.accept(ModItems.ROOM_KEY);
+        }
     }
 
     @SubscribeEvent
