@@ -22,7 +22,9 @@ public class ModBlocks {
             DeferredRegister.createBlocks(DungeonTidbits.MOD_ID);
 
     public static final DeferredBlock<Block> ROOM_VOID = registerBlock("room_void",
-            () -> new TransparentBlock(BlockBehaviour.Properties.of().strength(-1f).explosionResistance(3600000f).sound(SoundType.GLASS)));
+            () -> new TransparentBlock(BlockBehaviour.Properties.of().strength(-1f).explosionResistance(3600000f).sound(SoundType.GLASS).lightLevel((light) -> {
+                return 3;
+            })));
     public static final DeferredBlock<Block> POTTLE = registerBlock("pottle",
             () -> new PottleBlock(BlockBehaviour.Properties.of().strength(4f).sound(SoundType.DECORATED_POT).noOcclusion()));
     public static final DeferredBlock<Block> ROOM_GATEWAY = registerBlock("room_gateway",
