@@ -1,6 +1,7 @@
 package com.loafobucket.dungeontidbits;
 
 import com.loafobucket.dungeontidbits.block.ModBlocks;
+import com.loafobucket.dungeontidbits.component.ModDataComponents;
 import com.loafobucket.dungeontidbits.item.ModItems;
 import net.minecraft.world.item.CreativeModeTabs;
 import org.slf4j.Logger;
@@ -30,6 +31,7 @@ public class DungeonTidbits {
 
         ModItems.register(modEventBus);
         ModBlocks.register(modEventBus);
+        ModDataComponents.register(modEventBus);
 
         modEventBus.addListener(this::addCreative);
 
