@@ -1,0 +1,57 @@
+{
+  "variants": {
+    "orientation=down_east": {
+      "model": "dungeontidbits:block/room_constructor",
+      "x": 90,
+      "y": 90
+    },
+    "orientation=down_north": {
+      "model": "dungeontidbits:block/room_constructor",
+      "x": 90
+    },
+    "orientation=down_south": {
+      "model": "dungeontidbits:block/room_constructor",
+      "x": 90,
+      "y": 180
+    },
+    "orientation=down_west": {
+      "model": "dungeontidbits:block/room_constructor",
+      "x": 90,
+      "y": 270
+    },
+    "orientation=east_up": {
+      "model": "dungeontidbits:block/room_constructor",
+      "y": 90
+    },
+    "orientation=north_up": {
+      "model": "dungeontidbits:block/room_constructor"
+    },
+    "orientation=south_up": {
+      "model": "dungeontidbits:block/room_constructor",
+      "y": 180
+    },
+    "orientation=up_east": {
+      "model": "dungeontidbits:block/room_constructor",
+      "x": 270,
+      "y": 270
+    },
+    "orientation=up_north": {
+      "model": "dungeontidbits:block/room_constructor",
+      "x": 270,
+      "y": 180
+    },
+    "orientation=up_south": {
+      "model": "dungeontidbits:block/room_constructor",
+      "x": 270
+    },
+    "orientation=up_west": {
+      "model": "dungeontidbits:block/room_constructor",
+      "x": 270,
+      "y": 90
+    },
+    "orientation=west_up": {
+      "model": "dungeontidbits:block/room_constructor",
+      "y": 270
+    }
+  }
+}

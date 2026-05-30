@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "down": "dungeontidbits:block/room_constructor_top",
+    "east": "dungeontidbits:block/room_constructor_side",
+    "north": "dungeontidbits:block/room_constructor_side",
+    "particle": "dungeontidbits:block/room_constructor_face",
+    "south": "dungeontidbits:block/room_constructor_face",
+    "up": "dungeontidbits:block/room_constructor_top",
+    "west": "dungeontidbits:block/room_constructor_side"
+  }
+}

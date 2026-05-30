@@ -1,6 +1,7 @@
 {
   "item.dungeontidbits.room_key": "Room Key",
   "block.dungeontidbits.room_void": "Room Void",
+  "block.dungeontidbits.room_constructor": "Room Constructor",
   "block.dungeontidbits.inert_room_void": "Inert Room Void",
   "block.dungeontidbits.pottle": "Pottle",
   "block.dungeontidbits.room_gateway": "Room Gateway"
