@@ -1,0 +1,7 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "dungeontidbits:item/effect_extract",
+    "layer1": "dungeontidbits:item/effect_extract_overlay"
+  }
+}

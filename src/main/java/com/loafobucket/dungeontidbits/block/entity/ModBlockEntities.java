@@ -13,9 +13,9 @@ public class ModBlockEntities {
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES =
             DeferredRegister.create(BuiltInRegistries.BLOCK_ENTITY_TYPE, DungeonTidbits.MOD_ID);
 
-    //public static final Supplier<BlockEntityType<ConstructorBlockEntity>> CONSTRUCTOR_BE =
-            //BLOCK_ENTITIES.register("constructor_be", () -> BlockEntityType.Builder.of(
-                    //ConstructorBlockEntity::new, ModBlocks.CONSTRUCTOR.get()).build(null));
+    public static final Supplier<BlockEntityType<PottleBlockEntity>> POTTLE_BE =
+            BLOCK_ENTITIES.register("constructor_be", () -> BlockEntityType.Builder.of(
+                    PottleBlockEntity::new, ModBlocks.POTTLE.get()).build(null));
 
     public static void register(IEventBus eventBus) {
         BLOCK_ENTITIES.register(eventBus);
