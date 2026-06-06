@@ -1,0 +1,15 @@
+{
+  "type": "dungeontidbits:pottle",
+  "ingredients": [
+    {
+      "items": "minecraft:allium"
+    }
+  ],
+  "result": {
+    "id": "dungeontidbits:effect_extract",
+    "components": {
+      "minecraft:potion_contents": {"custom_effects": [{"id": "minecraft:fire_resistance"}]}
+    },
+    "count": 3
+  }
+}

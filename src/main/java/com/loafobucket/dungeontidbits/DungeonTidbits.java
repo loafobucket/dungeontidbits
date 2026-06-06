@@ -5,12 +5,8 @@ import com.loafobucket.dungeontidbits.block.entity.ModBlockEntities;
 import com.loafobucket.dungeontidbits.component.ModDataComponents;
 import com.loafobucket.dungeontidbits.item.ModItems;
 import com.loafobucket.dungeontidbits.recipe.ModRecipes;
-import net.minecraft.core.component.DataComponents;
-import net.minecraft.util.FastColor;
+import com.loafobucket.dungeontidbits.screen.ModMenuTypes;
 import net.minecraft.world.item.CreativeModeTabs;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.alchemy.PotionContents;
-import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
@@ -41,6 +37,7 @@ public class DungeonTidbits {
         ModDataComponents.register(modEventBus);
         ModBlockEntities.register(modEventBus);
         ModRecipes.register(modEventBus);
+        ModMenuTypes.register(modEventBus);
 
         modEventBus.addListener(this::addCreative);
 

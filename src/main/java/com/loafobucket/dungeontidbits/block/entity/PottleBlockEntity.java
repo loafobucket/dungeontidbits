@@ -1,43 +1,67 @@
 package com.loafobucket.dungeontidbits.block.entity;
 
-import com.loafobucket.dungeontidbits.recipe.ModRecipes;
 import com.loafobucket.dungeontidbits.recipe.PottleRecipe;
-import com.loafobucket.dungeontidbits.recipe.PottleRecipeInput;
+import com.loafobucket.dungeontidbits.screen.custom.PottleMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.Containers;
+import net.minecraft.world.MenuProvider;
 import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
-public class PottleBlockEntity extends BlockEntity {
-    public final ItemStackHandler itemHandler = new ItemStackHandler(2) {
+public class PottleBlockEntity extends BlockEntity implements MenuProvider {
+    public final ItemStackHandler itemHandler = new ItemStackHandler(6) {
         @Override
         protected void onContentsChanged(int slot) {
             setChanged();
             if(!level.isClientSide()) {
                 level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), 3);
+                if (isInputSlot(slot)) {
+                    if (!isRecipeValid()) {
+                        resetProgress();
+                    }
+                }
             }
+        }
+
+        @Override
+        public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
+            if (slot >= FIRST_INPUT_SLOT && slot <= LAST_INPUT_SLOT) {
+                ItemStack existingStack = itemHandler.getStackInSlot(slot);
+                if (!existingStack.isEmpty() && !ItemStack.isSameItem(existingStack, stack)) {
+                    return stack;
+                }
+            }
+            return super.insertItem(slot, stack, simulate);
         }
     };
 
-    private static final int INPUT_SLOT = 0;
-    private static final int OUTPUT_SLOT = 1;
+    private boolean isInputSlot(int slot) {
+        return slot >= FIRST_INPUT_SLOT && slot <= LAST_INPUT_SLOT;
+    }
+
+    public static final int FIRST_INPUT_SLOT = 0;
+    public static final int LAST_INPUT_SLOT = 3;
+    public static final int OUTPUT_SLOT = 4;
+    public static final int EXTRA_SLOT = 5;
 
     protected final ContainerData data;
     private int progress = 0;
@@ -75,6 +99,12 @@ public class PottleBlockEntity extends BlockEntity {
         return Component.translatable("block.dungeontidbits.pottle");
     }
 
+    @Nullable
+    @Override
+    public AbstractContainerMenu createMenu(int i, Inventory inventory, Player player) {
+        return new PottleMenu(i, inventory, this, this.data);
+    }
+
     public void drops() {
         SimpleContainer inventory = new SimpleContainer(itemHandler.getSlots());
         for (int i = 0; i < itemHandler.getSlots(); i++) {
@@ -101,28 +131,49 @@ public class PottleBlockEntity extends BlockEntity {
         progress = pTag.getInt("pottleprogress");
         maxProgress = pTag.getInt("pottlemaxprogress");
     }
-
-    public void tick(Level level, BlockPos blockPos, BlockState blockState) {
-        if(hasRecipe()) {
-            increaseCraftingProgress();
-            setChanged(level, blockPos, blockState);
-
-            if(hasCraftingFinished()) {
-                craftItem();
-                resetProgress();
+// thank you scorched guns
+    public static void tick(Level level, BlockPos blockPos, BlockState blockState, PottleBlockEntity blockEntity) {
+        if (!level.isClientSide) {
+            boolean hasValidRecipe = blockEntity.hasRecipe();
+            if (hasValidRecipe) {
+                blockEntity.progress++;
+                setChanged(level, blockPos, blockState);
+                if (blockEntity.progress >= blockEntity.maxProgress) {
+                    blockEntity.craftItem();
+                    blockEntity.resetProgress();
+                }
+            } else if (!hasValidRecipe) {
+                blockEntity.resetProgress();
             }
-        } else {
-            resetProgress();
         }
     }
 
     private void craftItem() {
-        Optional<RecipeHolder<PottleRecipe>> recipe = getCurrentRecipe();
-        ItemStack output = recipe.get().value().output();
+        Optional<PottleRecipe> match = getRecipe();
+        if (match.isPresent()) {
+            PottleRecipe recipe = match.get();
+            ItemStack resultItem = recipe.getResultItem(level.registryAccess());
+            ItemStack extraItem = recipe.getExtraItem(level.registryAccess());
+            ItemStack outputStack = itemHandler.getStackInSlot(OUTPUT_SLOT);
+            ItemStack extraStack = itemHandler.getStackInSlot(EXTRA_SLOT);
 
-        itemHandler.extractItem(INPUT_SLOT, 1, false);
-        itemHandler.setStackInSlot(OUTPUT_SLOT, new ItemStack(output.getItem(),
-                itemHandler.getStackInSlot(OUTPUT_SLOT).getCount() + output.getCount()));
+            if ((outputStack.isEmpty() || (outputStack.getItem() == resultItem.getItem() && outputStack.getCount() + resultItem.getCount() <= outputStack.getMaxStackSize()))
+                    && (extraStack.isEmpty() || (extraStack.getItem() == extraItem.getItem() && extraStack.getCount() + extraItem.getCount() <= extraStack.getMaxStackSize()))) {
+                for (int i = FIRST_INPUT_SLOT; i <= LAST_INPUT_SLOT; i++) {
+                    itemHandler.extractItem(i, 1, false);
+                }
+                if (outputStack.isEmpty()) {
+                    itemHandler.setStackInSlot(OUTPUT_SLOT, resultItem.copy());
+                } else {
+                    outputStack.grow(resultItem.getCount());
+                }
+                if (extraStack.isEmpty()) {
+                    itemHandler.setStackInSlot(EXTRA_SLOT, extraItem.copy());
+                } else {
+                    extraStack.grow(extraItem.getCount());
+                }
+            }
+        }
     }
 
     private void resetProgress() {
@@ -130,27 +181,41 @@ public class PottleBlockEntity extends BlockEntity {
         maxProgress = 72;
     }
 
-    private boolean hasCraftingFinished() {
-        return this.progress >= this.maxProgress;
-    }
-
-    private void increaseCraftingProgress() {
-        progress++;
-    }
-
     private boolean hasRecipe() {
-        Optional<RecipeHolder<PottleRecipe>> recipe = getCurrentRecipe();
-        if(recipe.isEmpty()) {
-            return false;
-        }
-
-        ItemStack output = recipe.get().value().output();
-        return canInsertAmountIntoOutputSlot(output.getCount()) && canInsertItemIntoOutputSlot(output);
+        return getRecipe().isPresent();
     }
 
-    private Optional<RecipeHolder<PottleRecipe>> getCurrentRecipe() {
-        return this.level.getRecipeManager()
-                .getRecipeFor(ModRecipes.POTTLE_TYPE.get(), new PottleRecipeInput(itemHandler.getStackInSlot(INPUT_SLOT)), level);
+    private boolean isRecipeValid() {
+        Optional<PottleRecipe> currentRecipe = getCurrentRecipe();
+        if (currentRecipe.isPresent()) {
+            PottleRecipe recipe = currentRecipe.get();
+            return recipe.matches(createRecipeInput(), level);
+        }
+        return false;
+    }
+
+    private Optional<PottleRecipe> getCurrentRecipe() {
+        if (level == null) return Optional.empty();
+        PottleRecipe.Input input = createRecipeInput();
+        return level.getRecipeManager().getAllRecipesFor(PottleRecipe.Type.INSTANCE).stream()
+                .map(recipe -> recipe.value())
+                .filter(recipe -> recipe.matches(input, level))
+                .findFirst();
+    }
+
+    private Optional<PottleRecipe> getRecipe() {
+        if (level == null) return Optional.empty();
+        return level.getRecipeManager()
+                .getRecipeFor(PottleRecipe.Type.INSTANCE, createRecipeInput(), level)
+                .map(recipe -> recipe.value());
+    }
+
+    private PottleRecipe.Input createRecipeInput() {
+        List<ItemStack> inputs = new ArrayList<>(LAST_INPUT_SLOT - FIRST_INPUT_SLOT + 1);
+        for (int i = FIRST_INPUT_SLOT; i <= LAST_INPUT_SLOT; i++) {
+            inputs.add(itemHandler.getStackInSlot(i));
+        }
+        return new PottleRecipe.Input(inputs);
     }
 
     private boolean canInsertItemIntoOutputSlot(ItemStack output) {
