@@ -1,35 +1,27 @@
 package com.loafobucket.dungeontidbits.recipe;
 
-import com.loafobucket.dungeontidbits.DungeonTidbits;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.*;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 
 import java.util.Iterator;
 import java.util.List;
 
 
-public class PottleRecipe implements Recipe<PottleRecipe.Input> {
-    private final NonNullList<Ingredient> inputItems;
-    private final ItemStack output;
-    private final ItemStack extra;
-
-    public PottleRecipe(NonNullList<Ingredient> inputItems, ItemStack output, ItemStack extra) {
-        this.inputItems = inputItems;
-        this.output = output;
-        this.extra = extra;
-    }
+public record PottleRecipe(NonNullList<Ingredient> inputItems, ItemStack output) implements Recipe<PottleRecipeInput> {
 
     @Override
-    public boolean matches(Input inv, Level world) {
-        if (world.isClientSide()) {
+    public boolean matches(PottleRecipeInput inv, Level level) {
+        if (level.isClientSide()) {
             return false;
         }
 
@@ -59,7 +51,7 @@ public class PottleRecipe implements Recipe<PottleRecipe.Input> {
     }
 
     @Override
-    public ItemStack assemble(Input inv, HolderLookup.Provider registries) {
+    public ItemStack assemble(PottleRecipeInput inv, HolderLookup.Provider registries) {
         return output.copy();
     }
 
@@ -73,18 +65,14 @@ public class PottleRecipe implements Recipe<PottleRecipe.Input> {
         return output.copy();
     }
 
-    public ItemStack getExtraItem(HolderLookup.Provider registries) {
-        return extra.copy();
-    }
-
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return Serializer.INSTANCE;
+        return ModRecipes.POTTLE_SERIALIZER.get();
     }
 
     @Override
     public RecipeType<?> getType() {
-        return Type.INSTANCE;
+        return ModRecipes.POTTLE_TYPE.get();
     }
 
     @Override
@@ -104,36 +92,11 @@ public class PottleRecipe implements Recipe<PottleRecipe.Input> {
         return list;
     }
 
-    public record Input(List<ItemStack> items) implements RecipeInput {
-        public Input {
-            items = List.copyOf(items);
-        }
-
-        @Override
-        public ItemStack getItem(int index) {
-            return index >= 0 && index < items.size() ? items.get(index) : ItemStack.EMPTY;
-        }
-
-        @Override
-        public int size() {
-            return items.size();
-        }
-    }
-
-    public static class Type implements RecipeType<PottleRecipe> {
-        public static final Type INSTANCE = new Type();
-        public static final String ID = "pottle";
-    }
-
     public static class Serializer implements RecipeSerializer<PottleRecipe> {
-        public static final Serializer INSTANCE = new Serializer();
-        public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(DungeonTidbits.MOD_ID, "pottle");
         private static final MapCodec<PottleRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
                 Ingredient.LIST_CODEC_NONEMPTY.fieldOf("ingredients").forGetter(recipe -> List.copyOf(recipe.inputItems)),
-                ItemStack.STRICT_CODEC.fieldOf("result").forGetter(recipe -> recipe.output),
-                ItemStack.STRICT_CODEC.fieldOf("extra").forGetter(recipe -> recipe.extra)
-        ).apply(instance, (ingredients, output, extra) ->
-                new PottleRecipe(toNonNullList(ingredients), output, extra)));
+                ItemStack.CODEC.fieldOf("result").forGetter(recipe -> recipe.output)
+        ).apply(instance, (ingredients, output) -> new PottleRecipe(toNonNullList(ingredients), output)));
         private static final StreamCodec<RegistryFriendlyByteBuf, PottleRecipe> STREAM_CODEC = StreamCodec.of(
                 Serializer::encode,
                 Serializer::decode
@@ -157,9 +120,8 @@ public class PottleRecipe implements Recipe<PottleRecipe.Input> {
             }
 
             ItemStack output = ItemStack.STREAM_CODEC.decode(buffer);
-            ItemStack extra = ItemStack.STREAM_CODEC.decode(buffer);
 
-            return new PottleRecipe(ingredients, output, extra);
+            return new PottleRecipe(ingredients, output);
         }
 
         private static void encode(RegistryFriendlyByteBuf buffer, PottleRecipe recipe) {
@@ -169,7 +131,6 @@ public class PottleRecipe implements Recipe<PottleRecipe.Input> {
             }
 
             ItemStack.STREAM_CODEC.encode(buffer, recipe.output);
-            ItemStack.STREAM_CODEC.encode(buffer, recipe.extra);
         }
     }
 }

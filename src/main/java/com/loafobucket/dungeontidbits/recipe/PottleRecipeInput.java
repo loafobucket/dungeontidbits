@@ -3,36 +3,22 @@ package com.loafobucket.dungeontidbits.recipe;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeInput;
 
-public record PottleRecipeInput(ItemStack input, ItemStack effect) implements RecipeInput {
-    public PottleRecipeInput(ItemStack input, ItemStack effect) {
-        this.input = input;
-        this.effect = effect;
+import java.util.List;
+import java.util.stream.Stream;
+//thank you forbidden and arcanus
+public record PottleRecipeInput(ItemStack firstInput, ItemStack secondInput, ItemStack thirdInput, ItemStack fourthInput) implements RecipeInput {
+
+    public List<ItemStack> getInputs() {
+        return Stream.of(this.firstInput, this.secondInput, this.thirdInput, this.fourthInput).filter(itemStack -> !itemStack.isEmpty()).toList();
     }
 
-    public ItemStack getItem(int i) {
-        ItemStack item;
-        switch (i) {
-            case 0 -> item = this.input;
-            case 1 -> item = this.effect;
-            default -> throw new IllegalArgumentException("Recipe does not contain slot " + i);
-        }
-
-        return item;
+    @Override
+    public ItemStack getItem(int index) {
+        return null;
     }
 
+    @Override
     public int size() {
-        return 2;
-    }
-
-    public boolean isEmpty() {
-        return this.input.isEmpty() && this.effect.isEmpty();
-    }
-
-    public ItemStack template() {
-        return this.input;
-    }
-
-    public ItemStack base() {
-        return this.effect;
+        return 0;
     }
 }

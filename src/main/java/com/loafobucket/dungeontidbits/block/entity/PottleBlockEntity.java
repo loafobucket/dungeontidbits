@@ -1,6 +1,8 @@
 package com.loafobucket.dungeontidbits.block.entity;
 
+import com.loafobucket.dungeontidbits.recipe.ModRecipes;
 import com.loafobucket.dungeontidbits.recipe.PottleRecipe;
+import com.loafobucket.dungeontidbits.recipe.PottleRecipeInput;
 import com.loafobucket.dungeontidbits.screen.custom.PottleMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
@@ -153,12 +155,9 @@ public class PottleBlockEntity extends BlockEntity implements MenuProvider {
         if (match.isPresent()) {
             PottleRecipe recipe = match.get();
             ItemStack resultItem = recipe.getResultItem(level.registryAccess());
-            ItemStack extraItem = recipe.getExtraItem(level.registryAccess());
             ItemStack outputStack = itemHandler.getStackInSlot(OUTPUT_SLOT);
-            ItemStack extraStack = itemHandler.getStackInSlot(EXTRA_SLOT);
 
-            if ((outputStack.isEmpty() || (outputStack.getItem() == resultItem.getItem() && outputStack.getCount() + resultItem.getCount() <= outputStack.getMaxStackSize()))
-                    && (extraStack.isEmpty() || (extraStack.getItem() == extraItem.getItem() && extraStack.getCount() + extraItem.getCount() <= extraStack.getMaxStackSize()))) {
+            if ((outputStack.isEmpty() || (outputStack.getItem() == resultItem.getItem() && outputStack.getCount() + resultItem.getCount() <= outputStack.getMaxStackSize()))) {
                 for (int i = FIRST_INPUT_SLOT; i <= LAST_INPUT_SLOT; i++) {
                     itemHandler.extractItem(i, 1, false);
                 }
@@ -166,11 +165,6 @@ public class PottleBlockEntity extends BlockEntity implements MenuProvider {
                     itemHandler.setStackInSlot(OUTPUT_SLOT, resultItem.copy());
                 } else {
                     outputStack.grow(resultItem.getCount());
-                }
-                if (extraStack.isEmpty()) {
-                    itemHandler.setStackInSlot(EXTRA_SLOT, extraItem.copy());
-                } else {
-                    extraStack.grow(extraItem.getCount());
                 }
             }
         }
@@ -196,26 +190,21 @@ public class PottleBlockEntity extends BlockEntity implements MenuProvider {
 
     private Optional<PottleRecipe> getCurrentRecipe() {
         if (level == null) return Optional.empty();
-        PottleRecipe.Input input = createRecipeInput();
-        return level.getRecipeManager().getAllRecipesFor(PottleRecipe.Type.INSTANCE).stream()
+        return level.getRecipeManager().getAllRecipesFor(ModRecipes.POTTLE_TYPE.get()).stream()
                 .map(recipe -> recipe.value())
-                .filter(recipe -> recipe.matches(input, level))
+                .filter(recipe -> recipe.matches(createRecipeInput(), level))
                 .findFirst();
     }
 
     private Optional<PottleRecipe> getRecipe() {
         if (level == null) return Optional.empty();
         return level.getRecipeManager()
-                .getRecipeFor(PottleRecipe.Type.INSTANCE, createRecipeInput(), level)
+                .getRecipeFor(ModRecipes.POTTLE_TYPE.get(),createRecipeInput(), level)
                 .map(recipe -> recipe.value());
     }
 
-    private PottleRecipe.Input createRecipeInput() {
-        List<ItemStack> inputs = new ArrayList<>(LAST_INPUT_SLOT - FIRST_INPUT_SLOT + 1);
-        for (int i = FIRST_INPUT_SLOT; i <= LAST_INPUT_SLOT; i++) {
-            inputs.add(itemHandler.getStackInSlot(i));
-        }
-        return new PottleRecipe.Input(inputs);
+    private PottleRecipeInput createRecipeInput() {
+        return new PottleRecipeInput(itemHandler.getStackInSlot(0),itemHandler.getStackInSlot(1),itemHandler.getStackInSlot(2),itemHandler.getStackInSlot(3));
     }
 
     private boolean canInsertItemIntoOutputSlot(ItemStack output) {

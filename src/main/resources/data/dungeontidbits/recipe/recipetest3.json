@@ -2,18 +2,14 @@
   "type": "dungeontidbits:pottle",
   "ingredients": [
     {
-      "items": "minecraft:allium"
+      "item": "minecraft:blaze_rod"
+    },
+    {
+      "item": "minecraft:blaze_rod"
     }
   ],
   "result": {
-    "id": "dungeontidbits:effect_extract",
-    "components": {
-      "minecraft:potion_contents": {"custom_effects": [{"id": "minecraft:fire_resistance"}]}
-    },
-    "count": 3
-  },
-  "extra": {
-    "id": "minecraft:stick",
-    "count": 1
+    "item": "minecraft:blaze_powder",
+    "count": 4
   }
 }

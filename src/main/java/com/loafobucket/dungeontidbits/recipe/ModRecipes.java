@@ -15,7 +15,7 @@ public class ModRecipes {
             DeferredRegister.create(Registries.RECIPE_TYPE, DungeonTidbits.MOD_ID);
 
     public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<PottleRecipe>> POTTLE_SERIALIZER =
-            SERIALIZERS.register("pottle",PottleRecipe.Serializer::new);
+            SERIALIZERS.register("pottle", PottleRecipe.Serializer::new);
     public static final DeferredHolder<RecipeType<?>, RecipeType<PottleRecipe>> POTTLE_TYPE =
             TYPES.register("pottle", () -> new RecipeType<PottleRecipe>() {
                 @Override
