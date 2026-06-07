@@ -1,5 +1,6 @@
 package com.loafobucket.dungeontidbits.recipe;
 
+import com.mojang.serialization.DataResult;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.HolderLookup;
@@ -7,27 +8,22 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.Recipe;
-import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 
 import java.util.Iterator;
 import java.util.List;
 
 
-public record PottleRecipe(NonNullList<Ingredient> inputItems, ItemStack output) implements Recipe<PottleRecipeInput> {
+public record PottleRecipe(NonNullList<Ingredient> ingredients, ItemStack result) implements Recipe<PottleRecipeInput> {
 
     @Override
     public boolean matches(PottleRecipeInput inv, Level level) {
         if (level.isClientSide()) {
             return false;
         }
-
         NonNullList<Ingredient> requiredIngredients = NonNullList.create();
-        requiredIngredients.addAll(inputItems);
-
+        requiredIngredients.addAll(ingredients);
         for (int i = 0; i < inv.size(); i++) {
             ItemStack stackInSlot = inv.getItem(i);
             if (!stackInSlot.isEmpty()) {
@@ -52,7 +48,7 @@ public record PottleRecipe(NonNullList<Ingredient> inputItems, ItemStack output)
 
     @Override
     public ItemStack assemble(PottleRecipeInput inv, HolderLookup.Provider registries) {
-        return output.copy();
+        return result.copy();
     }
 
     @Override
@@ -62,7 +58,7 @@ public record PottleRecipe(NonNullList<Ingredient> inputItems, ItemStack output)
 
     @Override
     public ItemStack getResultItem(HolderLookup.Provider registries) {
-        return output.copy();
+        return result.copy();
     }
 
     @Override
@@ -81,7 +77,7 @@ public record PottleRecipe(NonNullList<Ingredient> inputItems, ItemStack output)
     }
 
     public NonNullList<Ingredient> getIngredients() {
-        return inputItems;
+        return ingredients;
     }
 
     private static NonNullList<Ingredient> toNonNullList(List<Ingredient> ingredients) {
@@ -94,12 +90,18 @@ public record PottleRecipe(NonNullList<Ingredient> inputItems, ItemStack output)
 
     public static class Serializer implements RecipeSerializer<PottleRecipe> {
         private static final MapCodec<PottleRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-                Ingredient.LIST_CODEC_NONEMPTY.fieldOf("ingredients").forGetter(recipe -> List.copyOf(recipe.inputItems)),
-                ItemStack.CODEC.fieldOf("result").forGetter(recipe -> recipe.output)
+                Ingredient.CODEC_NONEMPTY.listOf().fieldOf("ingredients").flatXmap(inputlist -> {Ingredient[] aingredient = inputlist.toArray(Ingredient[]::new);
+                            if (aingredient.length == 0) {
+                                return DataResult.error(() -> "the recipe is empty");
+                            } else {
+                                return  DataResult.success(NonNullList.of(Ingredient.EMPTY, aingredient));}},
+                        DataResult::success)
+                        .forGetter(recipe -> recipe.ingredients),
+                ItemStack.CODEC.fieldOf("result").forGetter(recipe -> recipe.result)
         ).apply(instance, (ingredients, output) -> new PottleRecipe(toNonNullList(ingredients), output)));
+
         private static final StreamCodec<RegistryFriendlyByteBuf, PottleRecipe> STREAM_CODEC = StreamCodec.of(
-                Serializer::encode,
-                Serializer::decode
+                PottleRecipe.Serializer::toNetwork, PottleRecipe.Serializer::fromNetwork
         );
 
         @Override
@@ -112,25 +114,22 @@ public record PottleRecipe(NonNullList<Ingredient> inputItems, ItemStack output)
             return STREAM_CODEC;
         }
 
-        private static PottleRecipe decode(RegistryFriendlyByteBuf buffer) {
-            int size = buffer.readInt();
-            NonNullList<Ingredient> ingredients = NonNullList.withSize(size, Ingredient.EMPTY);
-            for (int i = 0; i < size; i++) {
-                ingredients.set(i, Ingredient.CONTENTS_STREAM_CODEC.decode(buffer));
-            }
-
-            ItemStack output = ItemStack.STREAM_CODEC.decode(buffer);
-
-            return new PottleRecipe(ingredients, output);
+        private static PottleRecipe fromNetwork(RegistryFriendlyByteBuf buffer) {
+            int i = buffer.readVarInt();
+            NonNullList<Ingredient> ingredients = NonNullList.withSize(i, Ingredient.EMPTY);
+            ingredients.replaceAll(p_319735_ -> Ingredient.CONTENTS_STREAM_CODEC.decode(buffer));
+            ItemStack result = ItemStack.STREAM_CODEC.decode(buffer);
+            return new PottleRecipe(ingredients, result);
         }
 
-        private static void encode(RegistryFriendlyByteBuf buffer, PottleRecipe recipe) {
-            buffer.writeInt(recipe.inputItems.size());
-            for (Ingredient ingredient : recipe.inputItems) {
+        private static void toNetwork(RegistryFriendlyByteBuf buffer, PottleRecipe recipe) {
+            buffer.writeVarInt(recipe.ingredients.size());
+
+            for (Ingredient ingredient : recipe.ingredients) {
                 Ingredient.CONTENTS_STREAM_CODEC.encode(buffer, ingredient);
             }
 
-            ItemStack.STREAM_CODEC.encode(buffer, recipe.output);
+            ItemStack.STREAM_CODEC.encode(buffer, recipe.result);
         }
     }
 }
