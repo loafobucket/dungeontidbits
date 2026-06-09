@@ -2,14 +2,27 @@
   "type": "dungeontidbits:pottle",
   "ingredients": [
     {
-      "items": "minecraft:allium"
+      "item": "minecraft:rotten_flesh"
+    },
+    {
+      "type": "neoforge:components",
+      "items": "dungeontidbits:effect_extract",
+      "components": {
+        "minecraft:potion_contents": {"custom_effects": [{"id": "minecraft:night_vision"}]}
+      },
+      "strict": false
+    },
+    {
+      "type": "neoforge:components",
+      "items": "dungeontidbits:effect_extract",
+      "components": {
+        "minecraft:potion_contents": {"custom_effects": [{"id": "minecraft:weakness"}]}
+      },
+      "strict": false
     }
   ],
   "result": {
-    "id": "dungeontidbits:effect_extract",
-    "components": {
-      "minecraft:potion_contents": {"custom_effects": [{"id": "minecraft:fire_resistance"}]}
-    },
-    "count": 3
+    "id": "minecraft:glowstone_dust",
+    "count": 1
   }
 }

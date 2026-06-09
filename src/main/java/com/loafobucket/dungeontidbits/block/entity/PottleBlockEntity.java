@@ -1,9 +1,12 @@
 package com.loafobucket.dungeontidbits.block.entity;
 
+import com.loafobucket.dungeontidbits.item.ModItems;
 import com.loafobucket.dungeontidbits.recipe.ModRecipes;
+import com.loafobucket.dungeontidbits.recipe.PottleFlowerRecipe;
 import com.loafobucket.dungeontidbits.recipe.PottleRecipe;
 import com.loafobucket.dungeontidbits.recipe.PottleRecipeInput;
 import com.loafobucket.dungeontidbits.screen.custom.PottleMenu;
+import com.mojang.datafixers.types.templates.Tag;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
@@ -11,6 +14,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.Containers;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.SimpleContainer;
@@ -67,7 +72,7 @@ public class PottleBlockEntity extends BlockEntity implements MenuProvider {
 
     protected final ContainerData data;
     private int progress = 0;
-    private int maxProgress = 72;
+    private int maxProgress = 40;
 
     public PottleBlockEntity(BlockPos pPos, BlockState pBlockState) {
         super(ModBlockEntities.POTTLE_BE.get(), pPos, pBlockState);
@@ -154,7 +159,8 @@ public class PottleBlockEntity extends BlockEntity implements MenuProvider {
         Optional<PottleRecipe> match = getRecipe();
         if (match.isPresent()) {
             PottleRecipe recipe = match.get();
-            ItemStack resultItem = recipe.getResultItem(level.registryAccess());
+//            if (itemHandler.getStackInSlot(0).is(ItemTags.SMALL_FLOWERS))
+            ItemStack resultItem = recipe.assemble(createRecipeInput(), level.registryAccess());
             ItemStack outputStack = itemHandler.getStackInSlot(OUTPUT_SLOT);
 
             if ((outputStack.isEmpty() || (outputStack.getItem() == resultItem.getItem() && outputStack.getCount() + resultItem.getCount() <= outputStack.getMaxStackSize()))) {
@@ -172,7 +178,7 @@ public class PottleBlockEntity extends BlockEntity implements MenuProvider {
 
     private void resetProgress() {
         progress = 0;
-        maxProgress = 72;
+        maxProgress = 40;
     }
 
     private boolean hasRecipe() {
@@ -204,7 +210,11 @@ public class PottleBlockEntity extends BlockEntity implements MenuProvider {
     }
 
     private PottleRecipeInput createRecipeInput() {
-        return new PottleRecipeInput(itemHandler.getStackInSlot(0),itemHandler.getStackInSlot(1),itemHandler.getStackInSlot(2),itemHandler.getStackInSlot(3));
+        List<ItemStack> inputs = new ArrayList<>(LAST_INPUT_SLOT - FIRST_INPUT_SLOT + 1);
+        for (int i = FIRST_INPUT_SLOT; i <= LAST_INPUT_SLOT; i++) {
+            inputs.add(itemHandler.getStackInSlot(i));
+        }
+        return new PottleRecipeInput(inputs);
     }
 
     private boolean canInsertItemIntoOutputSlot(ItemStack output) {

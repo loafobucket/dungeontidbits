@@ -14,8 +14,10 @@ public class ModRecipes {
     public static final DeferredRegister<RecipeType<?>> TYPES =
             DeferredRegister.create(Registries.RECIPE_TYPE, DungeonTidbits.MOD_ID);
 
-    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<PottleRecipe>> POTTLE_SERIALIZER =
-            SERIALIZERS.register("pottle", PottleRecipe.Serializer::new);
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<PottleNormalRecipe>> POTTLE_SERIALIZER =
+            SERIALIZERS.register("pottle", PottleNormalRecipe.Serializer::new);
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<PottleFlowerRecipe>> POTTLE_FLOWER_SERIALIZER =
+            SERIALIZERS.register("pottle_flower", PottleFlowerRecipe.Serializer::new);
     public static final DeferredHolder<RecipeType<?>, RecipeType<PottleRecipe>> POTTLE_TYPE =
             TYPES.register("pottle", () -> new RecipeType<PottleRecipe>() {
                 @Override
@@ -23,7 +25,6 @@ public class ModRecipes {
                     return "pottle";
                 }
             });
-
     public static void register(IEventBus eventBus) {
         SERIALIZERS.register(eventBus);
         TYPES.register(eventBus);

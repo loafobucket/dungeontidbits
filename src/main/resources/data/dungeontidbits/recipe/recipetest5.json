@@ -1,0 +1,11 @@
+{
+  "type": "dungeontidbits:pottle_flower",
+  "ingredients": [
+    {
+      "tag": "minecraft:small_flowers"
+    }
+  ],
+  "result": {
+    "id": "dungeontidbits:effect_extract"
+  }
+}

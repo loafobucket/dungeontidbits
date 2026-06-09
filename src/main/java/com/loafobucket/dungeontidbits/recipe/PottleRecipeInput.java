@@ -5,20 +5,20 @@ import net.minecraft.world.item.crafting.RecipeInput;
 
 import java.util.List;
 import java.util.stream.Stream;
-//thank you forbidden and arcanus
-public record PottleRecipeInput(ItemStack firstInput, ItemStack secondInput, ItemStack thirdInput, ItemStack fourthInput) implements RecipeInput {
+//thank you scorched guns
+public record PottleRecipeInput(List<ItemStack> items) implements RecipeInput {
 
-    public List<ItemStack> getInputs() {
-        return Stream.of(this.firstInput, this.secondInput, this.thirdInput, this.fourthInput).filter(itemStack -> !itemStack.isEmpty()).toList();
+    public PottleRecipeInput {
+        items = List.copyOf(items);
     }
 
     @Override
     public ItemStack getItem(int index) {
-        return null;
+        return index >= 0 && index < items.size() ? items.get(index) : ItemStack.EMPTY;
     }
 
     @Override
     public int size() {
-        return 0;
+        return items.size();
     }
 }

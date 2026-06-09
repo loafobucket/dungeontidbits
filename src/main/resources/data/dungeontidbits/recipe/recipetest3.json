@@ -2,14 +2,19 @@
   "type": "dungeontidbits:pottle",
   "ingredients": [
     {
-      "item": "minecraft:blaze_rod"
+      "item": "minecraft:rotten_flesh"
     },
     {
-      "item": "minecraft:blaze_rod"
+      "type": "neoforge:components",
+      "items": "dungeontidbits:effect_extract",
+      "components": {
+        "minecraft:potion_contents": {"custom_effects": [{"id": "minecraft:fire_resistance"}]}
+      },
+      "strict": false
     }
   ],
   "result": {
-    "item": "minecraft:blaze_powder",
-    "count": 4
+    "id": "minecraft:redstone",
+    "count": 3
   }
 }

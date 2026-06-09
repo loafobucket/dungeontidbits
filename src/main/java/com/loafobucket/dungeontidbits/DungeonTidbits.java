@@ -36,8 +36,8 @@ public class DungeonTidbits {
         ModBlocks.register(modEventBus);
         ModDataComponents.register(modEventBus);
         ModBlockEntities.register(modEventBus);
-        ModRecipes.register(modEventBus);
         ModMenuTypes.register(modEventBus);
+        ModRecipes.register(modEventBus);
 
         modEventBus.addListener(this::addCreative);
 
