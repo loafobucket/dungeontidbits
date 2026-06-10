@@ -2,14 +2,18 @@ package com.loafobucket.dungeontidbits.screen.custom;
 
 import com.loafobucket.dungeontidbits.block.ModBlocks;
 import com.loafobucket.dungeontidbits.block.entity.PottleBlockEntity;
+import com.loafobucket.dungeontidbits.item.ModItems;
 import com.loafobucket.dungeontidbits.screen.ModMenuTypes;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.SlotItemHandler;
 
 public class PottleMenu extends AbstractContainerMenu {
@@ -30,12 +34,42 @@ public class PottleMenu extends AbstractContainerMenu {
         addPlayerInventory(inv);
         addPlayerHotbar(inv);
 
-        this.addSlot(new SlotItemHandler(this.blockEntity.itemHandler, 0, 35, 17));
-        this.addSlot(new SlotItemHandler(this.blockEntity.itemHandler, 1, 17, 43));
-        this.addSlot(new SlotItemHandler(this.blockEntity.itemHandler, 2, 35, 43));
-        this.addSlot(new SlotItemHandler(this.blockEntity.itemHandler, 3, 53, 43));
-        this.addSlot(new SlotItemHandler(this.blockEntity.itemHandler, 4, 115, 35));
-        this.addSlot(new SlotItemHandler(this.blockEntity.itemHandler, 5, 142, 35));
+        this.addSlot(new SlotItemHandler(this.blockEntity.itemHandler, 0, 35, 17){
+            @Override
+            public boolean mayPlace(ItemStack stack) {
+                return !stack.getItem().equals(ModItems.EFFECT_EXTRACT.get());
+            }
+        });
+        this.addSlot(new SlotItemHandler(this.blockEntity.itemHandler, 1, 17, 43){
+            @Override
+            public boolean mayPlace(ItemStack stack) {
+                return stack.getItem().equals(ModItems.EFFECT_EXTRACT.get());
+            }
+        });
+        this.addSlot(new SlotItemHandler(this.blockEntity.itemHandler, 2, 35, 43){
+            @Override
+            public boolean mayPlace(ItemStack stack) {
+                return stack.getItem().equals(ModItems.EFFECT_EXTRACT.get());
+            }
+        });
+        this.addSlot(new SlotItemHandler(this.blockEntity.itemHandler, 3, 53, 43){
+            @Override
+            public boolean mayPlace(ItemStack stack) {
+                return stack.getItem().equals(ModItems.EFFECT_EXTRACT.get());
+            }
+        });
+        this.addSlot(new SlotItemHandler(this.blockEntity.itemHandler, 4, 115, 35){
+            @Override
+            public boolean mayPlace(ItemStack stack) {
+                return false;
+            }
+        });
+        this.addSlot(new SlotItemHandler(this.blockEntity.itemHandler, 5, 142, 35){
+            @Override
+            public boolean mayPlace(ItemStack stack) {
+                return false;
+            }
+        });
 
         addDataSlots(data);
     }

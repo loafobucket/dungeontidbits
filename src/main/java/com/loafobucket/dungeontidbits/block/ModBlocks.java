@@ -8,6 +8,7 @@ import com.loafobucket.dungeontidbits.item.ModItems;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.TransparentBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -30,9 +31,9 @@ public class ModBlocks {
                 return 3;
             })));
     public static final DeferredBlock<Block> POTTLE = registerBlock("pottle",
-            () -> new PottleBlock(BlockBehaviour.Properties.of().strength(4f).sound(SoundType.DECORATED_POT).noOcclusion()));
+            () -> new PottleBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.TERRACOTTA).requiresCorrectToolForDrops().strength(4f).sound(SoundType.DECORATED_POT).noOcclusion()));
     public static final DeferredBlock<Block> ROOM_GATEWAY = registerBlock("room_gateway",
-            () -> new RoomGatewayBlock(BlockBehaviour.Properties.of().strength(4f).sound(SoundType.DRIPSTONE_BLOCK)));
+            () -> new RoomGatewayBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.SMITHING_TABLE).strength(4f).sound(SoundType.DRIPSTONE_BLOCK)));
 
     private static <T extends Block> DeferredBlock<T> registerBlock(String name, Supplier<T> block) {
         DeferredBlock<T> toReturn = BLOCKS.register(name, block);

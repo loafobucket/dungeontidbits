@@ -1,20 +1,24 @@
 {
-  "type": "minecraft:crafting_shapeless",
+  "type": "dungeontidbits:pottle",
   "ingredients": [
+    {
+      "item": "minecraft:prismarine_shard"
+    },
     {
       "type": "neoforge:components",
       "items": "dungeontidbits:effect_extract",
       "components": {
-        "minecraft:potion_contents": {"custom_effects": [{"id": "minecraft:regeneration"}]}
+        "minecraft:potion_contents": {"custom_effects": [{"id": "minecraft:saturation"}]}
       },
       "strict": false
     }
   ],
   "result": {
-    "id": "dungeontidbits:effect_extract",
-    "components": {
-      "minecraft:potion_contents": {"custom_effects": [{"id": "minecraft:health_boost"}]}
-    },
+    "id": "minecraft:lapis_lazuli",
+    "count": 1
+  },
+  "extra": {
+    "id": "minecraft:cyan_dye",
     "count": 1
   }
 }

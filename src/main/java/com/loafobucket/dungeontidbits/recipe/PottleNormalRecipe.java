@@ -1,13 +1,16 @@
 package com.loafobucket.dungeontidbits.recipe;
 
+import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -15,15 +18,18 @@ import net.minecraft.world.level.Level;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 //thank you scorched guns
 public class PottleNormalRecipe implements PottleRecipe {
     final NonNullList<Ingredient> ingredients;
     final ItemStack result;
+    final Optional<ItemStack> extra;
 
-    public PottleNormalRecipe(NonNullList<Ingredient> ingredients, ItemStack result) {
+    public PottleNormalRecipe(NonNullList<Ingredient> ingredients, ItemStack result, Optional<ItemStack> extra) {
         this.ingredients = ingredients;
         this.result = result;
+        this.extra = extra;
     }
 
     @Override
@@ -62,6 +68,7 @@ public class PottleNormalRecipe implements PottleRecipe {
         return result.copy();
     }
 
+
     @Override
     public boolean canCraftInDimensions(int width, int height) {
         return true;
@@ -70,6 +77,15 @@ public class PottleNormalRecipe implements PottleRecipe {
     @Override
     public ItemStack getResultItem(HolderLookup.Provider registries) {
         return result.copy();
+    }
+
+    public ItemStack getExtraItem(HolderLookup.Provider registries) {
+        if (extra.isPresent()) {
+            return extra.get().copy();
+        }
+        else {
+            return ItemStack.EMPTY;
+        }
     }
 
     @Override
@@ -108,8 +124,9 @@ public class PottleNormalRecipe implements PottleRecipe {
                                 return  DataResult.success(NonNullList.of(Ingredient.EMPTY, aingredient));}},
                         DataResult::success)
                         .forGetter(recipe -> recipe.ingredients),
-                ItemStack.CODEC.fieldOf("result").forGetter(recipe -> recipe.result)
-        ).apply(instance, (ingredients, result) -> new PottleNormalRecipe(toNonNullList(ingredients), result)));
+                ItemStack.CODEC.fieldOf("result").forGetter(recipe -> recipe.result),
+                ItemStack.CODEC.optionalFieldOf("extra").forGetter(recipe -> recipe.extra)
+        ).apply(instance, (ingredients, result, extra) -> new PottleNormalRecipe(toNonNullList(ingredients), result, extra)));
 
         private static final StreamCodec<RegistryFriendlyByteBuf, PottleNormalRecipe> STREAM_CODEC = StreamCodec.of(
                 PottleNormalRecipe.Serializer::toNetwork, PottleNormalRecipe.Serializer::fromNetwork
@@ -130,7 +147,8 @@ public class PottleNormalRecipe implements PottleRecipe {
             NonNullList<Ingredient> ingredients = NonNullList.withSize(i, Ingredient.EMPTY);
             ingredients.replaceAll(p_319735_ -> Ingredient.CONTENTS_STREAM_CODEC.decode(buffer));
             ItemStack result = ItemStack.STREAM_CODEC.decode(buffer);
-            return new PottleNormalRecipe(ingredients, result);
+            Optional<ItemStack> extra = ItemStack.STREAM_CODEC.apply(ByteBufCodecs::optional).decode(buffer);
+            return new PottleNormalRecipe(ingredients, result, extra);
         }
 
         private static void toNetwork(RegistryFriendlyByteBuf buffer, PottleNormalRecipe recipe) {
@@ -141,6 +159,7 @@ public class PottleNormalRecipe implements PottleRecipe {
             }
 
             ItemStack.STREAM_CODEC.encode(buffer, recipe.result);
+            ItemStack.STREAM_CODEC.apply(ByteBufCodecs::optional).encode(buffer, recipe.extra);
         }
     }
 }

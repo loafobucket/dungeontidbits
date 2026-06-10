@@ -10,6 +10,7 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -72,7 +73,7 @@ public class PottleFlowerRecipe implements PottleRecipe {
             if (suspiciouseffectholder != null) {
                 MobEffectInstance suspiciouscontent = new MobEffectInstance(suspiciouseffectholder.getSuspiciousEffects().effects().getFirst().effect());
                 result.set(DataComponents.POTION_CONTENTS, new PotionContents(Optional.empty(), Optional.empty(), List.of(suspiciouscontent)));
-                result.setCount(1 + suspiciouseffectholder.getSuspiciousEffects().effects().getFirst().duration() / 20);
+                result.setCount(Math.ceilDiv(suspiciouseffectholder.getSuspiciousEffects().effects().getFirst().duration(), 20));
             }
         }
         return result;
@@ -85,7 +86,7 @@ public class PottleFlowerRecipe implements PottleRecipe {
 
     @Override
     public ItemStack getResultItem(HolderLookup.Provider registries) {
-        return result.copy();
+        return ItemStack.EMPTY;
     }
 
     @Override
