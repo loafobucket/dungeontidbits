@@ -1,24 +1,35 @@
 package com.loafobucket.dungeontidbits.block.entity;
 
+import com.loafobucket.dungeontidbits.block.ModBlocks;
+import com.loafobucket.dungeontidbits.block.custom.PottleBlock;
+import com.loafobucket.dungeontidbits.item.ModItems;
 import com.loafobucket.dungeontidbits.recipe.ModRecipes;
 import com.loafobucket.dungeontidbits.recipe.PottleRecipe;
 import com.loafobucket.dungeontidbits.recipe.PottleRecipeInput;
 import com.loafobucket.dungeontidbits.screen.custom.PottleMenu;
+import net.minecraft.client.resources.sounds.Sound;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Containers;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.AreaEffectCloud;
+import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -27,6 +38,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 public class PottleBlockEntity extends BlockEntity implements MenuProvider {
@@ -68,6 +80,11 @@ public class PottleBlockEntity extends BlockEntity implements MenuProvider {
     protected final ContainerData data;
     private int progress = 0;
     private int maxProgress = 40;
+
+    public boolean isActivated(BlockState state) {
+        return state.is(ModBlocks.POTTLE.get()) && state.getValue(PottleBlock.POWERED);
+    }
+    public boolean canActivate = true;
 
     public PottleBlockEntity(BlockPos pPos, BlockState pBlockState) {
         super(ModBlockEntities.POTTLE_BE.get(), pPos, pBlockState);
@@ -121,6 +138,7 @@ public class PottleBlockEntity extends BlockEntity implements MenuProvider {
         pTag.put("inventory", itemHandler.serializeNBT(pRegistries));
         pTag.putInt("pottleprogress", progress);
         pTag.putInt("pottlemaxprogress", maxProgress);
+        pTag.putBoolean("canactivate", canActivate);
 
         super.saveAdditional(pTag, pRegistries);
     }
@@ -132,20 +150,52 @@ public class PottleBlockEntity extends BlockEntity implements MenuProvider {
         itemHandler.deserializeNBT(pRegistries, pTag.getCompound("inventory"));
         progress = pTag.getInt("pottleprogress");
         maxProgress = pTag.getInt("pottlemaxprogress");
+        canActivate = pTag.getBoolean("canactivate");
     }
 // thank you scorched guns
     public static void tick(Level level, BlockPos blockPos, BlockState blockState, PottleBlockEntity blockEntity) {
         if (!level.isClientSide) {
             boolean hasValidRecipe = blockEntity.hasRecipe();
-            if (hasValidRecipe) {
-                blockEntity.progress++;
-                setChanged(level, blockPos, blockState);
-                if (blockEntity.progress >= blockEntity.maxProgress) {
-                    blockEntity.craftItem();
+            boolean activated = blockEntity.isActivated(blockState);
+            boolean canactivate = blockEntity.canActivate;
+            if (!activated) {
+                blockEntity.canActivate = true;
+                if (hasValidRecipe) {
+                    blockEntity.progress++;
+                    setChanged(level, blockPos, blockState);
+                    if (blockEntity.progress >= blockEntity.maxProgress) {
+                        level.playSound(null, blockPos, SoundEvents.BREWING_STAND_BREW, SoundSource.BLOCKS);
+                        blockEntity.craftItem();
+                        blockEntity.resetProgress();
+                    }
+                } else if (!hasValidRecipe) {
                     blockEntity.resetProgress();
                 }
-            } else if (!hasValidRecipe) {
-                blockEntity.resetProgress();
+            } else {
+                if(canactivate) {
+                    blockEntity.canActivate = false;
+                    List<MobEffectInstance> effectList = new ArrayList<>(List.of());
+                    for (int i = 1; i < 4; i++) {
+                        ItemStack itemStack = blockEntity.itemHandler.getStackInSlot(i);
+                        int j = itemStack.getCount();
+                        if (itemStack.getItem().equals(ModItems.EFFECT_EXTRACT.get())) {
+                            blockEntity.itemHandler.extractItem(i, Math.min(j, 16), false);
+                            MobEffectInstance effect = new MobEffectInstance(itemStack.get(DataComponents.POTION_CONTENTS).customEffects().getFirst().getEffect(), Math.min(j, 16) * 20);
+                            effectList.add(effect);
+                        }
+                    }
+                    if (!effectList.isEmpty()) {
+                        PotionContents cloudEffect = new PotionContents(Optional.empty(), Optional.empty(), effectList);
+                        AreaEffectCloud areaeffectcloud = new AreaEffectCloud(level, blockPos.getX(), blockPos.getY(), blockPos.getZ());
+                        areaeffectcloud.setRadius(0.7F);
+                        areaeffectcloud.setRadiusOnUse(0F);
+                        areaeffectcloud.setWaitTime(10);
+                        areaeffectcloud.setRadiusPerTick(0F);
+                        areaeffectcloud.setDuration(100);
+                        areaeffectcloud.setPotionContents(cloudEffect);
+                        level.addFreshEntity(areaeffectcloud);
+                    }
+                }
             }
         }
     }
