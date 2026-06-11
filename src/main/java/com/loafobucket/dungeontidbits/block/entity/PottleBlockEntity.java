@@ -7,8 +7,8 @@ import com.loafobucket.dungeontidbits.recipe.ModRecipes;
 import com.loafobucket.dungeontidbits.recipe.PottleRecipe;
 import com.loafobucket.dungeontidbits.recipe.PottleRecipeInput;
 import com.loafobucket.dungeontidbits.screen.custom.PottleMenu;
-import net.minecraft.client.resources.sounds.Sound;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
@@ -23,7 +23,6 @@ import net.minecraft.world.MenuProvider;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.AreaEffectCloud;
-import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -33,12 +32,13 @@ import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 public class PottleBlockEntity extends BlockEntity implements MenuProvider {
@@ -68,6 +68,10 @@ public class PottleBlockEntity extends BlockEntity implements MenuProvider {
         }
     };
 
+    public IItemHandler getItemHandler() {
+        return itemHandler;
+    }
+
     private boolean isInputSlot(int slot) {
         return slot >= FIRST_INPUT_SLOT && slot <= LAST_INPUT_SLOT;
     }
@@ -82,7 +86,7 @@ public class PottleBlockEntity extends BlockEntity implements MenuProvider {
     private int maxProgress = 40;
 
     public boolean isActivated(BlockState state) {
-        return state.is(ModBlocks.POTTLE.get()) && state.getValue(PottleBlock.POWERED);
+        return state.is(ModBlocks.POTTLE.get()) && state.getValue(PottleBlock.TRIGGERED);
     }
     public boolean canActivate = true;
 
@@ -111,6 +115,31 @@ public class PottleBlockEntity extends BlockEntity implements MenuProvider {
                 return 2;
             }
         };
+    }
+//thank you alex's caves
+    private static Vec3 rotateCenteredVec(Vec3 offset, Direction facing){
+        Vec3 rotate = offset;
+        switch (facing){
+            case DOWN:
+                rotate = offset.xRot((float) (Math.PI / 2F));
+                break;
+            case UP:
+                rotate = offset.xRot(-(float) (Math.PI / 2F));
+                break;
+            case NORTH:
+                rotate = offset;
+                break;
+            case SOUTH:
+                rotate = offset.yRot((float) (Math.PI));
+                break;
+            case WEST:
+                rotate = offset.yRot((float) (Math.PI / 2F));
+                break;
+            case EAST:
+                rotate = offset.yRot(-(float) (Math.PI / 2F));
+                break;
+        }
+        return rotate;
     }
 
     //@Override
@@ -174,26 +203,33 @@ public class PottleBlockEntity extends BlockEntity implements MenuProvider {
             } else {
                 if(canactivate) {
                     blockEntity.canActivate = false;
+                    level.playSound(null, blockPos, SoundEvents.DECORATED_POT_INSERT, SoundSource.BLOCKS, 1, 0.7f);
                     List<MobEffectInstance> effectList = new ArrayList<>(List.of());
+                    Integer cloudDuration = 0;
                     for (int i = 1; i < 4; i++) {
                         ItemStack itemStack = blockEntity.itemHandler.getStackInSlot(i);
                         int j = itemStack.getCount();
-                        if (itemStack.getItem().equals(ModItems.EFFECT_EXTRACT.get())) {
+                        if (itemStack.is(ModItems.EFFECT_EXTRACT.get()) && !itemStack.get(DataComponents.POTION_CONTENTS).customEffects().isEmpty()) {
                             blockEntity.itemHandler.extractItem(i, Math.min(j, 16), false);
                             MobEffectInstance effect = new MobEffectInstance(itemStack.get(DataComponents.POTION_CONTENTS).customEffects().getFirst().getEffect(), Math.min(j, 16) * 20);
                             effectList.add(effect);
+                            cloudDuration = cloudDuration + Math.min(j, 16);
                         }
                     }
                     if (!effectList.isEmpty()) {
                         PotionContents cloudEffect = new PotionContents(Optional.empty(), Optional.empty(), effectList);
+                        Direction facing = blockState.getValue(PottleBlock.FACING);
+                        Vec3 towards = rotateCenteredVec(new Vec3(0, -0.4F, -0.75F), facing);
                         AreaEffectCloud areaeffectcloud = new AreaEffectCloud(level, blockPos.getX(), blockPos.getY(), blockPos.getZ());
-                        areaeffectcloud.setRadius(0.7F);
-                        areaeffectcloud.setRadiusOnUse(0F);
+                        areaeffectcloud.setPos(towards.add(blockPos.getCenter()));
+                        areaeffectcloud.setRadius(0.6F);
+                        areaeffectcloud.setRadiusOnUse(0f);
                         areaeffectcloud.setWaitTime(10);
                         areaeffectcloud.setRadiusPerTick(0F);
-                        areaeffectcloud.setDuration(100);
+                        areaeffectcloud.setDuration(cloudDuration * 5);
                         areaeffectcloud.setPotionContents(cloudEffect);
                         level.addFreshEntity(areaeffectcloud);
+                        level.playSound(null, blockPos, SoundEvents.BOTTLE_EMPTY, SoundSource.BLOCKS, 1, 0.7f);
                     }
                 }
             }

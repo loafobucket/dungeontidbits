@@ -1,18 +1,33 @@
 {
   "variants": {
-    "facing=east": {
+    "facing=east,triggered=false": {
       "model": "dungeontidbits:block/pottle",
       "y": 90
     },
-    "facing=north": {
+    "facing=north,triggered=false": {
       "model": "dungeontidbits:block/pottle"
     },
-    "facing=south": {
+    "facing=south,triggered=false": {
       "model": "dungeontidbits:block/pottle",
       "y": 180
     },
-    "facing=west": {
+    "facing=west,triggered=false": {
       "model": "dungeontidbits:block/pottle",
+      "y": 270
+    },
+    "facing=east,triggered=true": {
+      "model": "dungeontidbits:block/pottle_on",
+      "y": 90
+    },
+    "facing=north,triggered=true": {
+      "model": "dungeontidbits:block/pottle_on"
+    },
+    "facing=south,triggered=true": {
+      "model": "dungeontidbits:block/pottle_on",
+      "y": 180
+    },
+    "facing=west,triggered=true": {
+      "model": "dungeontidbits:block/pottle_on",
       "y": 270
     }
   }
