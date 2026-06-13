@@ -33,8 +33,12 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.IItemHandlerModifiable;
 import net.neoforged.neoforge.items.ItemStackHandler;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -68,10 +72,26 @@ public class PottleBlockEntity extends BlockEntity implements MenuProvider {
         }
     };
 
-    public IItemHandler getItemHandler() {
-        return itemHandler;
+    public static void registerCapabilities(RegisterCapabilitiesEvent event) {
+        event.registerBlockEntity(
+                Capabilities.ItemHandler.BLOCK,
+                ModBlockEntities.POTTLE_BE.get(),
+                (be, side) -> be.getItemHandler(side)
+        );
     }
 
+    public IItemHandler getItemHandler(@Nullable Direction side) {
+        if (side == null) {
+            return itemHandler;
+        }
+        if (side == Direction.UP) {
+            return new InputItemHandler(itemHandler);
+        } else if (side == Direction.DOWN){
+            return new OutputItemHandler(itemHandler);
+        } else {
+            return new EffectItemHandler(itemHandler);
+        }
+    }
     private boolean isInputSlot(int slot) {
         return slot >= FIRST_INPUT_SLOT && slot <= LAST_INPUT_SLOT;
     }
@@ -193,7 +213,6 @@ public class PottleBlockEntity extends BlockEntity implements MenuProvider {
                     blockEntity.progress++;
                     setChanged(level, blockPos, blockState);
                     if (blockEntity.progress >= blockEntity.maxProgress) {
-                        level.playSound(null, blockPos, SoundEvents.BREWING_STAND_BREW, SoundSource.BLOCKS);
                         blockEntity.craftItem();
                         blockEntity.resetProgress();
                     }
@@ -250,6 +269,7 @@ public class PottleBlockEntity extends BlockEntity implements MenuProvider {
                 for (int i = FIRST_INPUT_SLOT; i <= LAST_INPUT_SLOT; i++) {
                     itemHandler.extractItem(i, 1, false);
                 }
+                level.playSound(null, getBlockPos(), SoundEvents.BREWING_STAND_BREW, SoundSource.BLOCKS);
                 if (outputStack.isEmpty()) {
                     itemHandler.setStackInSlot(OUTPUT_SLOT, resultItem.copy());
                     itemHandler.setStackInSlot(EXTRA_SLOT, extraItem.copy());
@@ -311,5 +331,78 @@ public class PottleBlockEntity extends BlockEntity implements MenuProvider {
     @Override
     public Packet<ClientGamePacketListener> getUpdatePacket() {
         return ClientboundBlockEntityDataPacket.create(this);
+    }
+
+//thank you scorched guns (2)
+private class InputItemHandler implements IItemHandlerModifiable {
+    private final ItemStackHandler itemHandler;
+    public InputItemHandler(ItemStackHandler itemHandler) {this.itemHandler = itemHandler;}
+    @Override
+    public void setStackInSlot(int slot, ItemStack stack) {itemHandler.setStackInSlot(slot, stack);}
+    @Override
+    public int getSlots() {return itemHandler.getSlots();}
+    @Override
+    public ItemStack getStackInSlot(int slot) {return itemHandler.getStackInSlot(slot);}
+    @Override
+    public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
+        if (slot == FIRST_INPUT_SLOT && !stack.is(ModItems.EFFECT_EXTRACT)) {
+            return itemHandler.insertItem(slot, stack, simulate);
+        }
+        return stack;
+    }
+    @Override
+    public ItemStack extractItem(int slot, int amount, boolean simulate) {return ItemStack.EMPTY;}
+    @Override
+    public int getSlotLimit(int slot) {return itemHandler.getSlotLimit(slot);}
+    @Override
+    public boolean isItemValid(int slot, ItemStack stack) {
+        return false;
+        }
+}
+    private class EffectItemHandler implements IItemHandlerModifiable {
+        private final ItemStackHandler itemHandler;
+        public EffectItemHandler(ItemStackHandler itemHandler) {this.itemHandler = itemHandler;}
+        @Override
+        public void setStackInSlot(int slot, ItemStack stack) {itemHandler.setStackInSlot(slot, stack);}
+        @Override
+        public int getSlots() {return itemHandler.getSlots();}
+        @Override
+        public ItemStack getStackInSlot(int slot) {return itemHandler.getStackInSlot(slot);}
+        @Override
+        public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
+            if (slot > FIRST_INPUT_SLOT && slot <= LAST_INPUT_SLOT && stack.is(ModItems.EFFECT_EXTRACT)) {
+                return itemHandler.insertItem(slot, stack, simulate);
+            }
+            return stack;
+        }
+        @Override
+        public ItemStack extractItem(int slot, int amount, boolean simulate) {return ItemStack.EMPTY;}
+        @Override
+        public int getSlotLimit(int slot) {return itemHandler.getSlotLimit(slot);}
+        @Override
+        public boolean isItemValid(int slot, ItemStack stack) {
+            return false;
+        }
+    }
+    private class OutputItemHandler implements IItemHandlerModifiable {
+        private final ItemStackHandler itemHandler;
+        public OutputItemHandler(ItemStackHandler itemHandler) {this.itemHandler = itemHandler;}
+        @Override
+        public void setStackInSlot(int slot, ItemStack stack) {itemHandler.setStackInSlot(slot, stack);}
+        @Override
+        public int getSlots() {return itemHandler.getSlots();}
+        @Override
+        public @NotNull ItemStack getStackInSlot(int i) {return itemHandler.getStackInSlot(i);}
+        @Override
+        public @NotNull ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {return stack;}
+        @Override
+        public @NotNull ItemStack extractItem(int slot, int amount, boolean simulate) {
+            if (slot == OUTPUT_SLOT || slot == EXTRA_SLOT) {
+                return itemHandler.extractItem(slot, amount, simulate);
+            }return ItemStack.EMPTY;}
+        @Override
+        public int getSlotLimit(int slot) {return itemHandler.getSlotLimit(slot);}
+        @Override
+        public boolean isItemValid(int slot, @NotNull ItemStack stack) {return false;}
     }
 }

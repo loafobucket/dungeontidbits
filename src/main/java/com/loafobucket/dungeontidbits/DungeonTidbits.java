@@ -3,6 +3,7 @@ package com.loafobucket.dungeontidbits;
 import com.loafobucket.dungeontidbits.block.ModBlocks;
 import com.loafobucket.dungeontidbits.block.entity.ModBlockEntities;
 import com.loafobucket.dungeontidbits.component.ModDataComponents;
+import com.loafobucket.dungeontidbits.event.ModCapabilities;
 import com.loafobucket.dungeontidbits.item.ModItems;
 import com.loafobucket.dungeontidbits.recipe.ModRecipes;
 import com.loafobucket.dungeontidbits.screen.ModMenuTypes;
@@ -40,6 +41,7 @@ public class DungeonTidbits {
         ModRecipes.register(modEventBus);
 
         modEventBus.addListener(this::addCreative);
+        modEventBus.addListener(ModCapabilities::registerCapabilities);
 
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
     }
