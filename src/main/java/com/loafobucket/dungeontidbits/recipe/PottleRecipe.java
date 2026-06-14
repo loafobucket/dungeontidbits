@@ -8,8 +8,15 @@ public interface PottleRecipe extends Recipe<PottleRecipeInput> {
         return ModRecipes.POTTLE_TYPE.get();
     }
 
+    default Float getResultChance(HolderLookup.Provider registries) {
+        return 1.0F;
+    }
 
     default ItemStack getExtraItem(HolderLookup.Provider registries) {
         return ItemStack.EMPTY;
+    }
+
+    default Float getExtraChance(HolderLookup.Provider registries) {
+        return 1.0F;
     }
 }

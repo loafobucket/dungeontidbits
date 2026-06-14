@@ -1,0 +1,26 @@
+{
+  "type": "dungeontidbits:pottle",
+  "ingredients": [
+    {
+      "item": "minecraft:basalt"
+    },
+    {
+      "type": "neoforge:components",
+      "items": "dungeontidbits:effect_extract",
+      "components": {
+        "minecraft:potion_contents": {"custom_effects": [{"id": "minecraft:wither"}]}
+      },
+      "strict": false
+    }
+  ],
+  "result": {
+    "id": "coal",
+    "count": 1
+  },
+  "resultChance":0.5,
+  "extra": {
+    "id": "minecraft:netherite_scrap",
+    "count": 1
+  },
+  "extraChance":0.1
+}

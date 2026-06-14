@@ -3,7 +3,16 @@
   "item.dungeontidbits.effect_extract": "Effect Extract",
   "block.dungeontidbits.room_void": "Room Void",
   "block.dungeontidbits.room_constructor": "Room Constructor",
-  "block.dungeontidbits.inert_room_void": "Inert Room Void",
   "block.dungeontidbits.pottle": "Pottle",
-  "block.dungeontidbits.room_gateway": "Room Gateway"
+  "block.dungeontidbits.room_gateway": "Room Gateway",
+
+  "block.dungeontidbits.room_wood": "Room Wood",
+  "block.dungeontidbits.room_wood_stairs": "Room Wood Stairs",
+  "block.dungeontidbits.room_wood_slab": "Room Wood Slab",
+  "block.dungeontidbits.room_tile": "Room Tile",
+  "block.dungeontidbits.room_tile_stairs": "Room Tile Stairs",
+  "block.dungeontidbits.room_tile_slab": "Room Tile Slab",
+  "block.dungeontidbits.room_stone": "Room Stone",
+  "block.dungeontidbits.room_stone_pillar": "Room Stone Pillar",
+  "block.dungeontidbits.room_light": "Room Light"
 }

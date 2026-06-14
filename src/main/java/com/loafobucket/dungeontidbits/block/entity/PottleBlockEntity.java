@@ -18,6 +18,7 @@ import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.Containers;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.SimpleContainer;
@@ -44,6 +45,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 public class PottleBlockEntity extends BlockEntity implements MenuProvider {
     public final ItemStackHandler itemHandler = new ItemStackHandler(6) {
@@ -257,10 +259,13 @@ public class PottleBlockEntity extends BlockEntity implements MenuProvider {
 
     private void craftItem() {
         Optional<PottleRecipe> match = getRecipe();
+        RandomSource random = RandomSource.create();
         if (match.isPresent()) {
             PottleRecipe recipe = match.get();
             ItemStack resultItem = recipe.assemble(createRecipeInput(), level.registryAccess());
+            Float resultChance = recipe.getResultChance(level.registryAccess());
             ItemStack extraItem = recipe.getExtraItem(level.registryAccess());
+            Float extraChance = recipe.getExtraChance(level.registryAccess());
             ItemStack outputStack = itemHandler.getStackInSlot(OUTPUT_SLOT);
             ItemStack extraStack = itemHandler.getStackInSlot(EXTRA_SLOT);
 
@@ -270,12 +275,20 @@ public class PottleBlockEntity extends BlockEntity implements MenuProvider {
                     itemHandler.extractItem(i, 1, false);
                 }
                 level.playSound(null, getBlockPos(), SoundEvents.BREWING_STAND_BREW, SoundSource.BLOCKS);
-                if (outputStack.isEmpty()) {
-                    itemHandler.setStackInSlot(OUTPUT_SLOT, resultItem.copy());
-                    itemHandler.setStackInSlot(EXTRA_SLOT, extraItem.copy());
-                } else {
-                    outputStack.grow(resultItem.getCount());
-                    extraStack.grow(extraItem.getCount());
+                if (random.nextDouble() < resultChance) {
+                    if (outputStack.isEmpty()) {
+                        itemHandler.setStackInSlot(OUTPUT_SLOT, resultItem.copy());
+
+                    } else {
+                        outputStack.grow(resultItem.getCount());
+                    }
+                }
+                if (random.nextDouble() < extraChance) {
+                    if (extraStack.isEmpty()) {
+                        itemHandler.setStackInSlot(EXTRA_SLOT, extraItem.copy());
+                    } else {
+                        extraStack.grow(extraItem.getCount());
+                    }
                 }
             }
         }

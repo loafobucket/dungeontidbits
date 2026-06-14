@@ -1,16 +1,11 @@
 package com.loafobucket.dungeontidbits.block;
 
 import com.loafobucket.dungeontidbits.DungeonTidbits;
-import com.loafobucket.dungeontidbits.block.custom.ConstructorBlock;
-import com.loafobucket.dungeontidbits.block.custom.PottleBlock;
-import com.loafobucket.dungeontidbits.block.custom.RoomGatewayBlock;
+import com.loafobucket.dungeontidbits.block.custom.*;
 import com.loafobucket.dungeontidbits.item.ModItems;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.block.TransparentBlock;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredBlock;
@@ -34,6 +29,37 @@ public class ModBlocks {
             () -> new PottleBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.TERRACOTTA).requiresCorrectToolForDrops().strength(4f).sound(SoundType.DECORATED_POT).noOcclusion()));
     public static final DeferredBlock<Block> ROOM_GATEWAY = registerBlock("room_gateway",
             () -> new RoomGatewayBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.SMITHING_TABLE).strength(4f).sound(SoundType.DRIPSTONE_BLOCK)));
+
+    public static final DeferredBlock<Block> ROOM_WOOD = registerBlock("room_wood",
+            () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.ACACIA_PLANKS).requiresCorrectToolForDrops()));
+    public static final DeferredBlock<StairBlock> ROOM_WOOD_STAIRS = registerBlock("room_wood_stairs",
+            () -> new StairBlock(ModBlocks.ROOM_WOOD.get().defaultBlockState(),BlockBehaviour.Properties.ofFullCopy(Blocks.ACACIA_STAIRS).requiresCorrectToolForDrops()));
+    public static final DeferredBlock<SlabBlock> ROOM_WOOD_SLAB = registerBlock("room_wood_slab",
+            () -> new SlabBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.ACACIA_SLAB).requiresCorrectToolForDrops()));
+
+    public static final DeferredBlock<Block> ROOM_TILE = registerBlock("room_tile",
+            () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.COBBLED_DEEPSLATE).requiresCorrectToolForDrops()));
+    public static final DeferredBlock<StairBlock> ROOM_TILE_STAIRS = registerBlock("room_tile_stairs",
+            () -> new StairBlock(ModBlocks.ROOM_TILE.get().defaultBlockState(),BlockBehaviour.Properties.ofFullCopy(Blocks.COBBLED_DEEPSLATE_STAIRS).requiresCorrectToolForDrops()));
+    public static final DeferredBlock<SlabBlock> ROOM_TILE_SLAB = registerBlock("room_tile_slab",
+            () -> new SlabBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.COBBLED_DEEPSLATE_SLAB).requiresCorrectToolForDrops()));
+
+    public static final DeferredBlock<Block> SLIPPING_TILE = registerBlock("slipping_tile",
+            () -> new SlippingTileBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.BLUE_ICE).friction(1.1F).jumpFactor(0f).strength(3f).requiresCorrectToolForDrops()));
+    public static final DeferredBlock<Block> BOOSTING_TILE = registerBlock("boosting_tile",
+            () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.AMETHYST_BLOCK).friction(0.9F).speedFactor(1.2f).jumpFactor(1.2f).strength(3f).requiresCorrectToolForDrops()));
+    public static final DeferredBlock<Block> TRAPPING_TILE = registerBlock("trapping_tile",
+            () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.SOUL_SAND).speedFactor(0.4f).jumpFactor(0.5f).strength(3f).requiresCorrectToolForDrops()));
+    public static final DeferredBlock<Block> DAMAGING_TILE = registerBlock("damaging_tile",
+            () -> new DamagingTileBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.MAGMA_BLOCK).strength(3f).requiresCorrectToolForDrops()));
+
+    public static final DeferredBlock<Block> ROOM_STONE = registerBlock("room_stone",
+            () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.COBBLESTONE).requiresCorrectToolForDrops()));
+    public static final DeferredBlock<Block> ROOM_STONE_PILLAR = registerBlock("room_stone_pillar",
+            () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.COBBLESTONE).requiresCorrectToolForDrops()));
+
+    public static final DeferredBlock<Block> ROOM_LIGHT = registerBlock("room_light",
+            () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.GLOWSTONE).requiresCorrectToolForDrops()));
 
     private static <T extends Block> DeferredBlock<T> registerBlock(String name, Supplier<T> block) {
         DeferredBlock<T> toReturn = BLOCKS.register(name, block);

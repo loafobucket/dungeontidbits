@@ -104,7 +104,6 @@ public class PottleBlock extends BaseEntityBlock {
         } else if (!flag && flag1) {
             level.setBlock(pos, state.setValue(TRIGGERED, false), 2);
         }
-
     }
 
     @Nullable

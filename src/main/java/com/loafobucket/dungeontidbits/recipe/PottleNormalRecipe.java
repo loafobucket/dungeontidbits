@@ -24,12 +24,16 @@ import java.util.Optional;
 public class PottleNormalRecipe implements PottleRecipe {
     final NonNullList<Ingredient> ingredients;
     final ItemStack result;
+    final Optional<Float> resultChance;
     final Optional<ItemStack> extra;
+    final Optional<Float> extraChance;
 
-    public PottleNormalRecipe(NonNullList<Ingredient> ingredients, ItemStack result, Optional<ItemStack> extra) {
+    public PottleNormalRecipe(NonNullList<Ingredient> ingredients, ItemStack result, Optional<Float> resultChance, Optional<ItemStack> extra, Optional<Float> extraChance) {
         this.ingredients = ingredients;
         this.result = result;
+        this.resultChance = resultChance;
         this.extra = extra;
+        this.extraChance = extraChance;
     }
 
     @Override
@@ -79,13 +83,16 @@ public class PottleNormalRecipe implements PottleRecipe {
         return result.copy();
     }
 
+    public Float getResultChance(HolderLookup.Provider registries) {
+        return resultChance.orElse(1.0F);
+    }
+
     public ItemStack getExtraItem(HolderLookup.Provider registries) {
-        if (extra.isPresent()) {
-            return extra.get().copy();
-        }
-        else {
-            return ItemStack.EMPTY;
-        }
+        return extra.map(ItemStack::copy).orElse(ItemStack.EMPTY);
+    }
+
+    public Float getExtraChance(HolderLookup.Provider registries) {
+        return extraChance.orElse(1.0F);
     }
 
     @Override
@@ -125,8 +132,10 @@ public class PottleNormalRecipe implements PottleRecipe {
                         DataResult::success)
                         .forGetter(recipe -> recipe.ingredients),
                 ItemStack.CODEC.fieldOf("result").forGetter(recipe -> recipe.result),
-                ItemStack.CODEC.optionalFieldOf("extra").forGetter(recipe -> recipe.extra)
-        ).apply(instance, (ingredients, result, extra) -> new PottleNormalRecipe(toNonNullList(ingredients), result, extra)));
+                Codec.FLOAT.optionalFieldOf("resultChance").forGetter(recipe -> recipe.resultChance),
+                ItemStack.CODEC.optionalFieldOf("extra").forGetter(recipe -> recipe.extra),
+                Codec.FLOAT.optionalFieldOf("extraChance").forGetter(recipe -> recipe.extraChance)
+        ).apply(instance, (ingredients, result, resultChance, extra, extraChance) -> new PottleNormalRecipe(toNonNullList(ingredients), result, resultChance, extra, extraChance)));
 
         private static final StreamCodec<RegistryFriendlyByteBuf, PottleNormalRecipe> STREAM_CODEC = StreamCodec.of(
                 PottleNormalRecipe.Serializer::toNetwork, PottleNormalRecipe.Serializer::fromNetwork
@@ -147,8 +156,10 @@ public class PottleNormalRecipe implements PottleRecipe {
             NonNullList<Ingredient> ingredients = NonNullList.withSize(i, Ingredient.EMPTY);
             ingredients.replaceAll(p_319735_ -> Ingredient.CONTENTS_STREAM_CODEC.decode(buffer));
             ItemStack result = ItemStack.STREAM_CODEC.decode(buffer);
+            Optional<Float> resultChance = Optional.of(buffer.readFloat());
             Optional<ItemStack> extra = ItemStack.STREAM_CODEC.apply(ByteBufCodecs::optional).decode(buffer);
-            return new PottleNormalRecipe(ingredients, result, extra);
+            Optional<Float> extraChance = Optional.of(buffer.readFloat());
+            return new PottleNormalRecipe(ingredients, result, resultChance, extra, extraChance);
         }
 
         private static void toNetwork(RegistryFriendlyByteBuf buffer, PottleNormalRecipe recipe) {
@@ -159,7 +170,9 @@ public class PottleNormalRecipe implements PottleRecipe {
             }
 
             ItemStack.STREAM_CODEC.encode(buffer, recipe.result);
+            buffer.writeFloat(recipe.resultChance.orElse(1F));
             ItemStack.STREAM_CODEC.apply(ByteBufCodecs::optional).encode(buffer, recipe.extra);
+            buffer.writeFloat(recipe.extraChance.orElse(1F));
         }
     }
 }

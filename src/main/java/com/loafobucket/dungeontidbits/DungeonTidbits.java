@@ -59,6 +59,17 @@ public class DungeonTidbits {
             event.accept(ModBlocks.POTTLE);
             event.accept(ModBlocks.ROOM_GATEWAY);
         }
+        if(event.getTabKey() == CreativeModeTabs.BUILDING_BLOCKS) {
+            event.accept(ModBlocks.ROOM_WOOD);
+            event.accept(ModBlocks.ROOM_WOOD_STAIRS);
+            event.accept(ModBlocks.ROOM_WOOD_SLAB);
+            event.accept(ModBlocks.ROOM_TILE);
+            event.accept(ModBlocks.ROOM_TILE_STAIRS);
+            event.accept(ModBlocks.ROOM_TILE_SLAB);
+            event.accept(ModBlocks.ROOM_STONE);
+            event.accept(ModBlocks.ROOM_STONE_PILLAR);
+            event.accept(ModBlocks.ROOM_LIGHT);
+        }
     }
 
     @SubscribeEvent

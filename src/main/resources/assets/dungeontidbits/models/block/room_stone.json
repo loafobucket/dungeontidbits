@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "bottom": "dungeontidbits:block/room_stone_end",
+    "top": "dungeontidbits:block/room_stone_end",
+    "side": "dungeontidbits:block/room_stone"
+  }
+}

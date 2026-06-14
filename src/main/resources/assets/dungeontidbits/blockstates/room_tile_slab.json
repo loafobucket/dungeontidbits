@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "dungeontidbits:block/room_tile_slab"
+    },
+    "type=double": {
+      "model": "dungeontidbits:block/room_tile"
+    },
+    "type=top": {
+      "model": "dungeontidbits:block/room_tile_slab_top"
+    }
+  }
+}
