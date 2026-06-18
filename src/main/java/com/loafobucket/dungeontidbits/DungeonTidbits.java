@@ -69,6 +69,11 @@ public class DungeonTidbits {
             event.accept(ModBlocks.ROOM_STONE);
             event.accept(ModBlocks.ROOM_STONE_PILLAR);
             event.accept(ModBlocks.ROOM_LIGHT);
+
+            event.accept(ModBlocks.SLIPPING_TILE);
+            event.accept(ModBlocks.BOOSTING_TILE);
+            event.accept(ModBlocks.TRAPPING_TILE);
+            event.accept(ModBlocks.DAMAGING_TILE);
         }
     }
 

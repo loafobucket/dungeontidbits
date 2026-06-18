@@ -14,5 +14,10 @@
   "block.dungeontidbits.room_tile_slab": "Room Tile Slab",
   "block.dungeontidbits.room_stone": "Room Stone",
   "block.dungeontidbits.room_stone_pillar": "Room Stone Pillar",
-  "block.dungeontidbits.room_light": "Room Light"
+  "block.dungeontidbits.room_light": "Room Light",
+
+  "block.dungeontidbits.slipping_tile": "Slipping Tile",
+  "block.dungeontidbits.boosting_tile": "Boosting Tile",
+  "block.dungeontidbits.trapping_tile": "Trapping Tile",
+  "block.dungeontidbits.damaging_tile": "Damaging Tile"
 }
