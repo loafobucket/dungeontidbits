@@ -80,21 +80,20 @@ public class RoomGatewayBlock extends HorizontalDirectionalBlock {
             direction = Direction.SOUTH;
         } else if (rotation == Rotation.CLOCKWISE_90) {
             direction = Direction.WEST;
-            rotationOffset.offset(tileZ, 0, 0);
+            rotationOffset = rotationOffset.offset(tileZ, 0, 0);
         } else if (rotation == Rotation.COUNTERCLOCKWISE_90) {
             direction = Direction.EAST;
-            rotationOffset.offset(0, 0, tileX);
+            rotationOffset = rotationOffset.offset(0, 0, tileX);
         } else {
             direction = Direction.NORTH;
-            rotationOffset.offset(tileX, 0, tileZ);
+            rotationOffset = rotationOffset.offset(tileX, 0, tileZ);
         }
         if (mirror == Mirror.LEFT_RIGHT) {
-            return mirrorOffset.relative(direction, tileX).offset(rotationOffset);
+            mirrorOffset = mirrorOffset.relative(direction, tileX);
         } else if (mirror == Mirror.FRONT_BACK) {
-            return mirrorOffset.relative(direction.getClockWise(), tileZ).offset(rotationOffset);
-        } else {
-            return rotationOffset;
+            mirrorOffset = mirrorOffset.relative(direction.getCounterClockWise(), tileZ);
         }
+        return rotationOffset.offset(mirrorOffset);
     }
 
     private void placeOne(ServerLevel serverLevel, BlockPos pos, Direction facing) {
@@ -103,14 +102,12 @@ public class RoomGatewayBlock extends HorizontalDirectionalBlock {
         BlockPos centerPos = pos.offset(new Vec3i(0,0,0).relative(facing.getOpposite(), 9));
         for  (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
-                String picking = String.valueOf(random.nextInt(11)+1);
+                String picking = String.valueOf(random.nextInt(12)+1);
                 StructureTemplate template = (StructureTemplate) serverLevel.getStructureManager().get(ResourceLocation.parse("dungeontidbits:one_"+picking)).orElse(null);
-                //Rotation rotation = rotationOption[random.nextInt(3)];
-                //Mirror mirror = mirrorOption[random.nextInt(2)];
-                Rotation rotation = Rotation.NONE;
-                Mirror mirror = Mirror.NONE;
+                Rotation rotation = rotationOption[random.nextInt(4)];
+                Mirror mirror = mirrorOption[random.nextInt(3)];
                 Vec3i offset = offsetter(rotation, mirror, tileSize, tileSize);
-                BlockPos changingPos = new BlockPos(centerPos.getX() + offset.getX() + (tileSize * i) - 2 , pos.getY(), centerPos.getZ() + offset.getZ() + (tileSize * j) - 2);
+                BlockPos changingPos = new BlockPos(centerPos.getX() + (tileSize * i) - 2 , pos.getY(), centerPos.getZ() + (tileSize * j) - 2).offset(offset);
                 if (template != null) {
                     placeStructure(serverLevel, template, changingPos, rotation, mirror);
                 }
@@ -119,7 +116,7 @@ public class RoomGatewayBlock extends HorizontalDirectionalBlock {
     }
 
     private void placeStructure(ServerLevel level, StructureTemplate structureTemplate, BlockPos pos, Rotation rotation, Mirror mirror) {
-        StructurePlaceSettings structureplacesettings = (new StructurePlaceSettings()).setMirror(mirror).setRotation(rotation).setIgnoreEntities(true);
+        StructurePlaceSettings structureplacesettings = new StructurePlaceSettings().setRotation(rotation).setMirror(mirror).setIgnoreEntities(true);
         structureTemplate.placeInWorld(level, pos, pos, structureplacesettings, createRandom(1), 2);
     }
 }
