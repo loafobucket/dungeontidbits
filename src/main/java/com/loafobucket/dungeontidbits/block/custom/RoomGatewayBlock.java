@@ -6,10 +6,8 @@ import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
@@ -30,7 +28,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import javax.annotation.Nullable;
 import java.util.Random;
 
-import static com.mojang.datafixers.TypeRewriteRule.orElse;
 
 public class RoomGatewayBlock extends HorizontalDirectionalBlock {
     public static final MapCodec<RoomGatewayBlock> CODEC = simpleCodec(RoomGatewayBlock::new);
@@ -60,6 +57,8 @@ public class RoomGatewayBlock extends HorizontalDirectionalBlock {
             ServerLevel serverLevel = (ServerLevel) level;
             if (stack.is(ModItems.ROOM_KEY)) {
                 placeOne(serverLevel, pos, state.getValue(FACING));
+                placeTwo(serverLevel, pos, state.getValue(FACING));
+                placeThree(serverLevel, pos, state.getValue(FACING));
                 return ItemInteractionResult.CONSUME;
             }
         }
@@ -89,9 +88,9 @@ public class RoomGatewayBlock extends HorizontalDirectionalBlock {
             rotationOffset = rotationOffset.offset(tileX, 0, tileZ);
         }
         if (mirror == Mirror.LEFT_RIGHT) {
-            mirrorOffset = mirrorOffset.relative(direction, tileX);
+            mirrorOffset = mirrorOffset.relative(direction, tileZ);
         } else if (mirror == Mirror.FRONT_BACK) {
-            mirrorOffset = mirrorOffset.relative(direction.getCounterClockWise(), tileZ);
+            mirrorOffset = mirrorOffset.relative(direction.getCounterClockWise(), tileX);
         }
         return rotationOffset.offset(mirrorOffset);
     }
@@ -102,14 +101,87 @@ public class RoomGatewayBlock extends HorizontalDirectionalBlock {
         BlockPos centerPos = pos.offset(new Vec3i(0,0,0).relative(facing.getOpposite(), 9));
         for  (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
-                String picking = String.valueOf(random.nextInt(12)+1);
-                StructureTemplate template = (StructureTemplate) serverLevel.getStructureManager().get(ResourceLocation.parse("dungeontidbits:one_"+picking)).orElse(null);
+                StructureTemplate template;
+                if (i == 0 && j == 0) {
+                    String picking = String.valueOf(random.nextInt(2)+1);
+                    template = (StructureTemplate) serverLevel.getStructureManager().get(ResourceLocation.parse("dungeontidbits:center_"+picking)).orElse(null);
+                } else {
+                    String picking = String.valueOf(random.nextInt(12)+1);
+                    template = (StructureTemplate) serverLevel.getStructureManager().get(ResourceLocation.parse("dungeontidbits:one_"+picking)).orElse(null);
+                }
                 Rotation rotation = rotationOption[random.nextInt(4)];
                 Mirror mirror = mirrorOption[random.nextInt(3)];
                 Vec3i offset = offsetter(rotation, mirror, tileSize, tileSize);
                 BlockPos changingPos = new BlockPos(centerPos.getX() + (tileSize * i) - 2 , pos.getY(), centerPos.getZ() + (tileSize * j) - 2).offset(offset);
                 if (template != null) {
                     placeStructure(serverLevel, template, changingPos, rotation, mirror);
+                }
+            }
+        }
+    }
+
+    private void placeTwo(ServerLevel serverLevel, BlockPos pos, Direction facing) {
+        int tileSize = 5;
+        Random random = new Random();
+        BlockPos centerPos = pos.offset(new Vec3i(0,0,0).relative(facing.getOpposite(), 9));
+        for  (int i = -1; i <= 1; i++) {
+            for (int j = -1; j <= 1; j++) {
+                if (random.nextFloat() <= 0.15) {
+                    String picking = String.valueOf(random.nextInt(6) + 1);
+                    StructureTemplate template = (StructureTemplate) serverLevel.getStructureManager().get(ResourceLocation.parse("dungeontidbits:two_"+picking)).orElse(null);
+                    Rotation rotation = null;
+                    int rotationPick = random.nextInt(2);
+                    if (i == 0 && j != 0) {
+                        rotation = rotationOption[rotationPick * 2];
+
+                    } else if (j == 0 && i != 0) {
+                        rotation = rotationOption[rotationPick * 2 + 1];
+                    }
+                    if (template != null && rotation != null) {
+                        Mirror mirror = mirrorOption[random.nextInt(3)];
+                        Vec3i offset = offsetter(rotation, mirror, tileSize * 2, tileSize);
+                        BlockPos changingPos = new BlockPos(centerPos.getX() + (tileSize * i) - 2, pos.getY(), centerPos.getZ() + (tileSize * j) - 2).offset(offset);
+                        placeStructure(serverLevel, template, changingPos, rotation, mirror);
+                    }
+                }
+            }
+        }
+    }
+
+    private void placeThree(ServerLevel serverLevel, BlockPos pos, Direction facing) {
+        int tileSize = 5;
+        Random random = new Random();
+        BlockPos centerPos = pos.offset(new Vec3i(0,0,0).relative(facing.getOpposite(), 9));
+        for (int i = -1; i <= 1; i++) {
+            for (int j = -1; j <= 1; j++) {
+                if (random.nextFloat() <= 0.05) {
+                    String picking = String.valueOf(random.nextInt(4) + 1);
+                    StructureTemplate template = (StructureTemplate) serverLevel.getStructureManager().get(ResourceLocation.parse("dungeontidbits:three_"+picking)).orElse(null);
+                    Rotation rotation = null;
+                    Vec3i bandaid = new Vec3i(0,0,0);
+                    int rotationPick = random.nextInt(2);
+                    if (i == -1 && j == 1) {
+                        rotation = rotationOption[rotationPick]; //0 1
+                        if (rotationPick == 1) {bandaid = bandaid.offset(0, 0, -tileSize * 2);}
+                    }
+                    if (i == 1 && j == 1) {
+                        rotation = rotationOption[rotationPick + 1]; //1 2
+                        if (rotationPick == 0) {bandaid = bandaid.offset(0, 0, -tileSize * 2);}
+                        else {bandaid = bandaid.offset(-tileSize * 2, 0, 0);}
+                    }
+                    if (i == 1 && j == -1) {
+                        rotation = rotationOption[rotationPick + 2]; //2 3
+                        if (rotationPick == 0) {bandaid = bandaid.offset(-tileSize * 2, 0, 0);}
+                    }
+                    if (i == -1 && j == -1) {
+                        rotation = rotationOption[rotationPick * 3]; //0 3
+                    }
+                    if (template != null && rotation != null) {
+                        Mirror mirror = mirrorOption[random.nextInt(3)];
+                        Vec3i offset = offsetter(rotation, mirror, tileSize * 3, tileSize).offset(bandaid);
+                        BlockPos changingPos = new BlockPos(centerPos.getX() + (tileSize * i) - 2, pos.getY(), centerPos.getZ() + (tileSize * j) - 2).offset(offset);
+                        placeStructure(serverLevel, template, changingPos, rotation, mirror);
+                    }
                 }
             }
         }
