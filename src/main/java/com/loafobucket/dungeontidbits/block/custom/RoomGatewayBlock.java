@@ -8,6 +8,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
@@ -56,13 +58,16 @@ public class RoomGatewayBlock extends HorizontalDirectionalBlock {
         if (!level.isClientSide) {
             ServerLevel serverLevel = (ServerLevel) level;
             if (stack.is(ModItems.ROOM_KEY)) {
+                stack.consume(1, player);
+                level.playSound(null, pos, SoundEvents.VAULT_INSERT_ITEM, SoundSource.BLOCKS, 1, 0.7f);
+                placeBase(serverLevel, pos, state.getValue(FACING));
                 placeOne(serverLevel, pos, state.getValue(FACING));
                 placeTwo(serverLevel, pos, state.getValue(FACING));
                 placeThree(serverLevel, pos, state.getValue(FACING));
                 return ItemInteractionResult.CONSUME;
             }
         }
-        return ItemInteractionResult.SUCCESS;
+        return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
     }
 
     public static RandomSource createRandom(long seed) {
@@ -95,15 +100,27 @@ public class RoomGatewayBlock extends HorizontalDirectionalBlock {
         return rotationOffset.offset(mirrorOffset);
     }
 
+    private void placeBase(ServerLevel serverLevel, BlockPos pos, Direction facing) {
+        BlockPos centerPos = pos.offset(new Vec3i(0,0,0).relative(facing.getOpposite(), 10));
+        StructureTemplate template = (StructureTemplate) serverLevel.getStructureManager().get(ResourceLocation.parse("dungeontidbits:roomreset")).orElse(null);
+        Rotation rotation = rotationOption[facing.getOpposite().get2DDataValue()];
+        Mirror mirror = Mirror.NONE;
+        Vec3i offset = offsetter(rotation, mirror, 17, 17);
+        BlockPos changingPos = new BlockPos(centerPos.getX() - 8, pos.getY() - 1, centerPos.getZ() -8).offset(offset);
+        if (template != null) {
+            placeStructure(serverLevel, template, changingPos, rotation, mirror);
+        }
+    }
+
     private void placeOne(ServerLevel serverLevel, BlockPos pos, Direction facing) {
         int tileSize = 5;
         Random random = new Random();
-        BlockPos centerPos = pos.offset(new Vec3i(0,0,0).relative(facing.getOpposite(), 9));
+        BlockPos centerPos = pos.offset(new Vec3i(0,0,0).relative(facing.getOpposite(), 10));
         for  (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
                 StructureTemplate template;
                 if (i == 0 && j == 0) {
-                    String picking = String.valueOf(random.nextInt(2)+1);
+                    String picking = String.valueOf(random.nextInt(4)+1);
                     template = (StructureTemplate) serverLevel.getStructureManager().get(ResourceLocation.parse("dungeontidbits:center_"+picking)).orElse(null);
                 } else {
                     String picking = String.valueOf(random.nextInt(12)+1);
@@ -123,7 +140,7 @@ public class RoomGatewayBlock extends HorizontalDirectionalBlock {
     private void placeTwo(ServerLevel serverLevel, BlockPos pos, Direction facing) {
         int tileSize = 5;
         Random random = new Random();
-        BlockPos centerPos = pos.offset(new Vec3i(0,0,0).relative(facing.getOpposite(), 9));
+        BlockPos centerPos = pos.offset(new Vec3i(0,0,0).relative(facing.getOpposite(), 10));
         for  (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
                 if (random.nextFloat() <= 0.15) {
@@ -151,7 +168,7 @@ public class RoomGatewayBlock extends HorizontalDirectionalBlock {
     private void placeThree(ServerLevel serverLevel, BlockPos pos, Direction facing) {
         int tileSize = 5;
         Random random = new Random();
-        BlockPos centerPos = pos.offset(new Vec3i(0,0,0).relative(facing.getOpposite(), 9));
+        BlockPos centerPos = pos.offset(new Vec3i(0,0,0).relative(facing.getOpposite(), 10));
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
                 if (random.nextFloat() <= 0.05) {

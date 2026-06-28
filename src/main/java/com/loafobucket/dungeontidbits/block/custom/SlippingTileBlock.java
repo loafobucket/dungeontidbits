@@ -22,7 +22,7 @@ public class SlippingTileBlock extends Block {
         return CODEC;
     }
     public void stepOn(Level level, BlockPos pos, BlockState state, Entity entity) {
-        if (entity instanceof LivingEntity) {
+        if (!entity.isSteppingCarefully() && entity instanceof LivingEntity) {
             ((LivingEntity) entity).addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 1, 2));
             if (entity.getTicksFrozen() > 90) {
                 entity.setIsInPowderSnow(true);

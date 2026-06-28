@@ -1,4 +1,4 @@
-package com.loafobucket.dungeontidbits.event;
+package com.loafobucket.dungeontidbits.misc;
 
 import com.loafobucket.dungeontidbits.DungeonTidbits;
 import com.loafobucket.dungeontidbits.item.ModItems;

@@ -1,6 +1,9 @@
 {
+  "attributes.dungeontidbits.dampening": "Dampening",
+  "effect.dungeontidbits.dampening": "Dampening",
   "item.dungeontidbits.room_key": "Room Key",
   "item.dungeontidbits.effect_extract": "Effect Extract",
+
   "block.dungeontidbits.room_void": "Room Void",
   "block.dungeontidbits.room_constructor": "Room Constructor",
   "block.dungeontidbits.pottle": "Pottle",
@@ -15,6 +18,7 @@
   "block.dungeontidbits.room_stone": "Room Stone",
   "block.dungeontidbits.room_stone_pillar": "Room Stone Pillar",
   "block.dungeontidbits.room_light": "Room Light",
+  "block.dungeontidbits.room_spawner": "Room Spawner",
 
   "block.dungeontidbits.slipping_tile": "Slipping Tile",
   "block.dungeontidbits.boosting_tile": "Boosting Tile",

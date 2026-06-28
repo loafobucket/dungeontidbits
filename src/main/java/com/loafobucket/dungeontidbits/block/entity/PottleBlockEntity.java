@@ -105,12 +105,12 @@ public class PottleBlockEntity extends BlockEntity implements MenuProvider {
 
     protected final ContainerData data;
     private int progress = 0;
-    private int maxProgress = 40;
+    private int maxProgress = 20;
 
-    public boolean isActivated(BlockState state) {
+    private boolean isActivated(BlockState state) {
         return state.is(ModBlocks.POTTLE.get()) && state.getValue(PottleBlock.TRIGGERED);
     }
-    public boolean canActivate = true;
+    private boolean canActivate = true;
 
     public PottleBlockEntity(BlockPos pPos, BlockState pBlockState) {
         super(ModBlockEntities.POTTLE_BE.get(), pPos, pBlockState);
@@ -142,12 +142,6 @@ public class PottleBlockEntity extends BlockEntity implements MenuProvider {
     private static Vec3 rotateCenteredVec(Vec3 offset, Direction facing){
         Vec3 rotate = offset;
         switch (facing){
-            case DOWN:
-                rotate = offset.xRot((float) (Math.PI / 2F));
-                break;
-            case UP:
-                rotate = offset.xRot(-(float) (Math.PI / 2F));
-                break;
             case NORTH:
                 rotate = offset;
                 break;
@@ -296,7 +290,7 @@ public class PottleBlockEntity extends BlockEntity implements MenuProvider {
 
     private void resetProgress() {
         progress = 0;
-        maxProgress = 40;
+        maxProgress = 20;
     }
 
     private boolean hasRecipe() {

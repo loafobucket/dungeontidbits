@@ -1,4 +1,4 @@
-package com.loafobucket.dungeontidbits.event;
+package com.loafobucket.dungeontidbits.misc;
 
 import com.loafobucket.dungeontidbits.block.entity.PottleBlockEntity;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;

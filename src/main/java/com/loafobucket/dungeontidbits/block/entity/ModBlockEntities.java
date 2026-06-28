@@ -17,6 +17,10 @@ public class ModBlockEntities {
             BLOCK_ENTITIES.register("pottle_be", () -> BlockEntityType.Builder.of(
                     PottleBlockEntity::new, ModBlocks.POTTLE.get()).build(null));
 
+    public static final Supplier<BlockEntityType<RoomSpawnerBlockEntity>> ROOM_SPAWNER_BE =
+            BLOCK_ENTITIES.register("room_spawner_be", () -> BlockEntityType.Builder.of(
+                    RoomSpawnerBlockEntity::new, ModBlocks.ROOM_SPAWNER.get()).build(null));
+
     public static void register(IEventBus eventBus) {
         BLOCK_ENTITIES.register(eventBus);
     }

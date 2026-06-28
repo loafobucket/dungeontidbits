@@ -3,7 +3,9 @@ package com.loafobucket.dungeontidbits;
 import com.loafobucket.dungeontidbits.block.ModBlocks;
 import com.loafobucket.dungeontidbits.block.entity.ModBlockEntities;
 import com.loafobucket.dungeontidbits.component.ModDataComponents;
-import com.loafobucket.dungeontidbits.event.ModCapabilities;
+import com.loafobucket.dungeontidbits.effect.ModEffects;
+import com.loafobucket.dungeontidbits.misc.ModAttributes;
+import com.loafobucket.dungeontidbits.misc.ModCapabilities;
 import com.loafobucket.dungeontidbits.item.ModItems;
 import com.loafobucket.dungeontidbits.recipe.ModRecipes;
 import com.loafobucket.dungeontidbits.screen.ModMenuTypes;
@@ -39,6 +41,8 @@ public class DungeonTidbits {
         ModBlockEntities.register(modEventBus);
         ModMenuTypes.register(modEventBus);
         ModRecipes.register(modEventBus);
+        ModAttributes.register(modEventBus);
+        ModEffects.register(modEventBus);
 
         modEventBus.addListener(this::addCreative);
         modEventBus.addListener(ModCapabilities::registerCapabilities);
@@ -69,6 +73,7 @@ public class DungeonTidbits {
             event.accept(ModBlocks.ROOM_STONE);
             event.accept(ModBlocks.ROOM_STONE_PILLAR);
             event.accept(ModBlocks.ROOM_LIGHT);
+            event.accept(ModBlocks.ROOM_SPAWNER);
 
             event.accept(ModBlocks.SLIPPING_TILE);
             event.accept(ModBlocks.BOOSTING_TILE);

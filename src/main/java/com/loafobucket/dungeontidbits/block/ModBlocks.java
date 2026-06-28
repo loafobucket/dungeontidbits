@@ -60,6 +60,8 @@ public class ModBlocks {
 
     public static final DeferredBlock<Block> ROOM_LIGHT = registerBlock("room_light",
             () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.GLOWSTONE).requiresCorrectToolForDrops()));
+    public static final DeferredBlock<Block> ROOM_SPAWNER = registerBlock("room_spawner",
+            () -> new RoomSpawnerBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.GOLD_BLOCK).noOcclusion().requiresCorrectToolForDrops().lightLevel((light) -> {return 15;})));
 
     private static <T extends Block> DeferredBlock<T> registerBlock(String name, Supplier<T> block) {
         DeferredBlock<T> toReturn = BLOCKS.register(name, block);
