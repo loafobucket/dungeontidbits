@@ -1,0 +1,37 @@
+{
+  "type": "dungeontidbits:pottle",
+  "ingredients": [
+    {
+      "item": "minecraft:magma_cream"
+    },
+    {
+      "type": "neoforge:components",
+      "items": "dungeontidbits:effect_extract",
+      "components": {
+        "minecraft:potion_contents": {"custom_effects": [{"id": "minecraft:speed"}]}
+      },
+      "strict": false
+    },
+    {
+      "type": "neoforge:components",
+      "items": "dungeontidbits:effect_extract",
+      "components": {
+        "minecraft:potion_contents": {"custom_effects": [{"id": "minecraft:speed"}]}
+      },
+      "strict": false
+    },
+    {
+      "type": "neoforge:components",
+      "items": "dungeontidbits:effect_extract",
+      "components": {
+        "minecraft:potion_contents": {"custom_effects": [{"id": "minecraft:infested"}]}
+      },
+      "strict": false
+    }
+  ],
+  "result": {
+    "id": "minecraft:ender_pearl",
+    "count": 1
+  },
+  "resultChance": 0.3
+}

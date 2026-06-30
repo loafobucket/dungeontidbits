@@ -16,10 +16,8 @@ public class ModRecipes {
 
     public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<PottleNormalRecipe>> POTTLE_SERIALIZER =
             SERIALIZERS.register("pottle", PottleNormalRecipe.Serializer::new);
-    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<PottleFlowerRecipe>> POTTLE_FLOWER_SERIALIZER =
-            SERIALIZERS.register("pottle_flower", PottleFlowerRecipe.Serializer::new);
-    public static final DeferredHolder<RecipeType<?>, RecipeType<PottleRecipe>> POTTLE_TYPE =
-            TYPES.register("pottle", () -> new RecipeType<PottleRecipe>() {
+    public static final DeferredHolder<RecipeType<?>, RecipeType<PottleNormalRecipe>> POTTLE_TYPE =
+            TYPES.register("pottle", () -> new RecipeType<PottleNormalRecipe>() {
                 @Override
                 public String toString() {
                     return "pottle";

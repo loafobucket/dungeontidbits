@@ -1,0 +1,28 @@
+{
+  "type": "dungeontidbits:pottle",
+  "ingredients": [
+    {
+      "item": "minecraft:red_dye"
+    },
+    {
+      "type": "neoforge:components",
+      "items": "dungeontidbits:effect_extract",
+      "components": {
+        "minecraft:potion_contents": {"custom_effects": [{"id": "minecraft:fire_resistance"}]}
+      },
+      "strict": false
+    },
+    {
+      "type": "neoforge:components",
+      "items": "dungeontidbits:effect_extract",
+      "components": {
+        "minecraft:potion_contents": {"custom_effects": [{"id": "minecraft:fire_resistance"}]}
+      },
+      "strict": false
+    }
+  ],
+  "result": {
+    "id": "minecraft:redstone",
+    "count": 1
+  }
+}

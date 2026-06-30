@@ -1,0 +1,31 @@
+{
+  "type": "dungeontidbits:pottle",
+  "ingredients": [
+    {
+      "item": "minecraft:wind_charge"
+    },
+    {
+      "type": "neoforge:components",
+      "items": "dungeontidbits:effect_extract",
+      "components": {
+        "minecraft:potion_contents": {"custom_effects": [{"id": "minecraft:slowness"}]}
+      },
+      "strict": false
+    },
+    {
+      "type": "neoforge:components",
+      "items": "dungeontidbits:effect_extract",
+      "components": {
+        "minecraft:potion_contents": {"custom_effects": [{"id": "minecraft:slowness"}]}
+      },
+      "strict": false
+    }
+  ],
+  "result": {
+    "id": "dungeontidbits:effect_extract",
+    "components": {
+      "minecraft:potion_contents": {"custom_effects": [{"id": "minecraft:speed"}]}
+    },
+    "count": 1
+  }
+}

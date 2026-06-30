@@ -1,5 +1,6 @@
 package com.loafobucket.dungeontidbits.recipe;
 
+import net.minecraft.client.RecipeBookCategories;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
@@ -19,4 +20,6 @@ public interface PottleRecipe extends Recipe<PottleRecipeInput> {
     default Float getExtraChance(HolderLookup.Provider registries) {
         return 1.0F;
     }
+
+    default CraftingBookCategory craftingBookCategory() {return CraftingBookCategory.MISC;}
 }

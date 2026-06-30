@@ -1,0 +1,36 @@
+{
+  "type": "dungeontidbits:pottle",
+  "ingredients": [
+    {
+      "item": "minecraft:prismarine_shard"
+    },
+    {
+      "type": "neoforge:components",
+      "items": "dungeontidbits:effect_extract",
+      "components": {
+        "minecraft:potion_contents": {"custom_effects": [{"id": "minecraft:weakness"}]}
+      },
+      "strict": false
+    },
+    {
+      "type": "neoforge:components",
+      "items": "dungeontidbits:effect_extract",
+      "components": {
+        "minecraft:potion_contents": {"custom_effects": [{"id": "minecraft:glowing"}]}
+      },
+      "strict": false
+    },
+    {
+      "type": "neoforge:components",
+      "items": "dungeontidbits:effect_extract",
+      "components": {
+        "minecraft:potion_contents": {"custom_effects": [{"id": "minecraft:night_vision"}]}
+      },
+      "strict": false
+    }
+  ],
+  "result": {
+    "id": "minecraft:prismarine_crystals",
+    "count": 2
+  }
+}

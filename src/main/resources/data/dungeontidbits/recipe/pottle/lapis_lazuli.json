@@ -1,0 +1,43 @@
+{
+  "type": "dungeontidbits:pottle",
+  "ingredients": [
+    {
+      "item": "minecraft:blue_dye"
+    },
+    {
+      "type": "neoforge:components",
+      "items": "dungeontidbits:effect_extract",
+      "components": {
+        "minecraft:potion_contents": {"custom_effects": [{"id": "minecraft:regeneration"}]}
+      },
+      "strict": false
+    },
+    {
+      "type": "neoforge:components",
+      "items": "dungeontidbits:effect_extract",
+      "components": {
+        "minecraft:potion_contents": {"custom_effects": [{"id": "minecraft:regeneration"}]}
+      },
+      "strict": false
+    },
+    {
+      "type": "neoforge:components",
+      "items": "dungeontidbits:effect_extract",
+      "components": {
+        "minecraft:potion_contents": {"custom_effects": [{"id": "minecraft:saturation"}]}
+      },
+      "strict": false
+    }
+  ],
+  "result": {
+    "id": "minecraft:lapis_lazuli",
+    "count": 1
+  },
+  "extra": {
+    "id": "dungeontidbits:effect_extract",
+    "components": {
+      "minecraft:potion_contents": {"custom_effects": [{"id": "minecraft:slowness"}]}
+    },
+    "count": 2
+  }
+}

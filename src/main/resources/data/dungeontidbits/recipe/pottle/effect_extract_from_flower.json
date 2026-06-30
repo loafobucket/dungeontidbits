@@ -1,8 +1,8 @@
 {
-  "type": "dungeontidbits:pottle_flower",
+  "type": "dungeontidbits:pottle",
   "ingredients": [
     {
-      "tag": "minecraft:small_flowers"
+      "tag": "dungeontidbits:modified_small_flowers"
     }
   ],
   "result": {

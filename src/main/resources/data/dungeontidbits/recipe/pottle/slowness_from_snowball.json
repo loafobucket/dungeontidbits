@@ -1,0 +1,16 @@
+{
+  "type": "dungeontidbits:pottle",
+  "ingredients": [
+    {
+      "item": "minecraft:snowball"
+    }
+  ],
+  "result": {
+    "id": "dungeontidbits:effect_extract",
+    "components": {
+      "minecraft:potion_contents": {"custom_effects": [{"id": "minecraft:slowness"}]}
+    },
+    "count": 1
+  },
+  "resultChance": 0.3
+}

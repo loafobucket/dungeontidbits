@@ -1,0 +1,33 @@
+{
+  "type": "dungeontidbits:pottle",
+  "ingredients": [
+    {
+      "item": "minecraft:iron_ingot"
+    },
+    {
+      "type": "neoforge:components",
+      "items": "dungeontidbits:effect_extract",
+      "components": {
+        "minecraft:potion_contents": {"custom_effects": [{"id": "minecraft:wither"}]}
+      },
+      "strict": false
+    },
+    {
+      "type": "neoforge:components",
+      "items": "dungeontidbits:effect_extract",
+      "components": {
+        "minecraft:potion_contents": {"custom_effects": [{"id": "minecraft:slow_falling"}]}
+      },
+      "strict": false
+    }
+  ],
+  "result": {
+    "id": "minecraft:raw_iron",
+    "count": 1
+  },
+  "extra": {
+    "id": "minecraft:raw_iron",
+    "count": 1
+  },
+  "extraChance": 0.5
+}

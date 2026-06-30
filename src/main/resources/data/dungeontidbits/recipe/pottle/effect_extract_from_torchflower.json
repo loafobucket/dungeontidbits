@@ -1,0 +1,22 @@
+{
+  "type": "dungeontidbits:pottle",
+  "ingredients": [
+    {
+      "item": "minecraft:torchflower"
+    }
+  ],
+  "result": {
+    "id": "dungeontidbits:effect_extract",
+    "components": {
+      "minecraft:potion_contents": {"custom_effects": [{"id": "minecraft:night_vision"}]}
+    },
+    "count": 6
+  },
+  "extra": {
+    "id": "dungeontidbits:effect_extract",
+    "components": {
+      "minecraft:potion_contents": {"custom_effects": [{"id": "minecraft:strength"}]}
+    },
+    "count": 6
+  }
+}

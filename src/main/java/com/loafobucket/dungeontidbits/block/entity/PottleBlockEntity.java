@@ -4,6 +4,7 @@ import com.loafobucket.dungeontidbits.block.ModBlocks;
 import com.loafobucket.dungeontidbits.block.custom.PottleBlock;
 import com.loafobucket.dungeontidbits.item.ModItems;
 import com.loafobucket.dungeontidbits.recipe.ModRecipes;
+import com.loafobucket.dungeontidbits.recipe.PottleNormalRecipe;
 import com.loafobucket.dungeontidbits.recipe.PottleRecipe;
 import com.loafobucket.dungeontidbits.recipe.PottleRecipeInput;
 import com.loafobucket.dungeontidbits.screen.custom.PottleMenu;
@@ -86,10 +87,17 @@ public class PottleBlockEntity extends BlockEntity implements MenuProvider {
         if (side == null) {
             return itemHandler;
         }
+        Direction facing = getBlockState().getValue(PottleBlock.FACING);
         if (side == Direction.UP) {
             return new InputItemHandler(itemHandler);
         } else if (side == Direction.DOWN){
             return new OutputItemHandler(itemHandler);
+        } else if (side == facing.getClockWise()){
+            return new EffectItemHandlerA(itemHandler);
+        } else if (side == facing.getOpposite()){
+            return new EffectItemHandlerB(itemHandler);
+        } else if (side == facing.getCounterClockWise()){
+            return new EffectItemHandlerC(itemHandler);
         } else {
             return new EffectItemHandler(itemHandler);
         }
@@ -263,8 +271,8 @@ public class PottleBlockEntity extends BlockEntity implements MenuProvider {
             ItemStack outputStack = itemHandler.getStackInSlot(OUTPUT_SLOT);
             ItemStack extraStack = itemHandler.getStackInSlot(EXTRA_SLOT);
 
-            if ((outputStack.isEmpty() || (outputStack.getItem() == resultItem.getItem() && outputStack.getCount() + resultItem.getCount() <= outputStack.getMaxStackSize())) &&
-                    (extraStack.isEmpty() || (extraStack.getItem() == extraItem.getItem() && extraStack.getCount() + extraItem.getCount() <= extraStack.getMaxStackSize()))) {
+            if ((outputStack.isEmpty() || (ItemStack.isSameItemSameComponents(outputStack, resultItem) && outputStack.getCount() + resultItem.getCount() <= outputStack.getMaxStackSize())) &&
+                    (extraStack.isEmpty() || (ItemStack.isSameItemSameComponents(extraStack, extraItem) && extraStack.getCount() + extraItem.getCount() <= extraStack.getMaxStackSize()))) {
                 for (int i = FIRST_INPUT_SLOT; i <= LAST_INPUT_SLOT; i++) {
                     itemHandler.extractItem(i, 1, false);
                 }
@@ -298,7 +306,7 @@ public class PottleBlockEntity extends BlockEntity implements MenuProvider {
     }
 
     private boolean isRecipeValid() {
-        Optional<PottleRecipe> currentRecipe = getCurrentRecipe();
+        Optional<PottleNormalRecipe> currentRecipe = getCurrentRecipe();
         if (currentRecipe.isPresent()) {
             PottleRecipe recipe = currentRecipe.get();
             return recipe.matches(createRecipeInput(), level);
@@ -306,7 +314,7 @@ public class PottleBlockEntity extends BlockEntity implements MenuProvider {
         return false;
     }
 
-    private Optional<PottleRecipe> getCurrentRecipe() {
+    private Optional<PottleNormalRecipe> getCurrentRecipe() {
         if (level == null) return Optional.empty();
         return level.getRecipeManager().getAllRecipesFor(ModRecipes.POTTLE_TYPE.get()).stream()
                 .map(recipe -> recipe.value())
@@ -378,6 +386,81 @@ private class InputItemHandler implements IItemHandlerModifiable {
         @Override
         public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
             if (slot > FIRST_INPUT_SLOT && slot <= LAST_INPUT_SLOT && stack.is(ModItems.EFFECT_EXTRACT)) {
+                return itemHandler.insertItem(slot, stack, simulate);
+            }
+            return stack;
+        }
+        @Override
+        public ItemStack extractItem(int slot, int amount, boolean simulate) {return ItemStack.EMPTY;}
+        @Override
+        public int getSlotLimit(int slot) {return itemHandler.getSlotLimit(slot);}
+        @Override
+        public boolean isItemValid(int slot, ItemStack stack) {
+            return false;
+        }
+    }
+    private class EffectItemHandlerA implements IItemHandlerModifiable {
+        private final ItemStackHandler itemHandler;
+        public EffectItemHandlerA(ItemStackHandler itemHandler) {this.itemHandler = itemHandler;}
+        @Override
+        public void setStackInSlot(int slot, ItemStack stack) {itemHandler.setStackInSlot(slot, stack);}
+        @Override
+        public int getSlots() {return itemHandler.getSlots();}
+        @Override
+        public ItemStack getStackInSlot(int slot) {return itemHandler.getStackInSlot(slot);}
+        @Override
+        public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
+            if (slot == 1 && stack.is(ModItems.EFFECT_EXTRACT)) {
+                return itemHandler.insertItem(slot, stack, simulate);
+            }
+            return stack;
+        }
+        @Override
+        public ItemStack extractItem(int slot, int amount, boolean simulate) {return ItemStack.EMPTY;}
+        @Override
+        public int getSlotLimit(int slot) {return itemHandler.getSlotLimit(slot);}
+        @Override
+        public boolean isItemValid(int slot, ItemStack stack) {
+            return false;
+        }
+    }
+    private class EffectItemHandlerB implements IItemHandlerModifiable {
+        private final ItemStackHandler itemHandler;
+        public EffectItemHandlerB(ItemStackHandler itemHandler) {this.itemHandler = itemHandler;}
+        @Override
+        public void setStackInSlot(int slot, ItemStack stack) {itemHandler.setStackInSlot(slot, stack);}
+        @Override
+        public int getSlots() {return itemHandler.getSlots();}
+        @Override
+        public ItemStack getStackInSlot(int slot) {return itemHandler.getStackInSlot(slot);}
+        @Override
+        public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
+            if (slot == 2 && stack.is(ModItems.EFFECT_EXTRACT)) {
+                return itemHandler.insertItem(slot, stack, simulate);
+            }
+            return stack;
+        }
+        @Override
+        public ItemStack extractItem(int slot, int amount, boolean simulate) {return ItemStack.EMPTY;}
+        @Override
+        public int getSlotLimit(int slot) {return itemHandler.getSlotLimit(slot);}
+        @Override
+        public boolean isItemValid(int slot, ItemStack stack) {
+            return false;
+        }
+    }
+    private class EffectItemHandlerC implements IItemHandlerModifiable {
+        private final ItemStackHandler itemHandler;
+        public EffectItemHandlerC(ItemStackHandler itemHandler) {this.itemHandler = itemHandler;}
+        @Override
+        public void setStackInSlot(int slot, ItemStack stack) {itemHandler.setStackInSlot(slot, stack);}
+        @Override
+        public int getSlots() {return itemHandler.getSlots();}
+        @Override
+        public ItemStack getStackInSlot(int slot) {return itemHandler.getStackInSlot(slot);}
+        @Override
+        public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
+            if (slot == 3 && stack.is(ModItems.EFFECT_EXTRACT)) {
                 return itemHandler.insertItem(slot, stack, simulate);
             }
             return stack;

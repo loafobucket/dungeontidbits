@@ -2,19 +2,23 @@
   "type": "dungeontidbits:pottle",
   "ingredients": [
     {
-      "item": "minecraft:rotten_flesh"
+      "item": "minecraft:water_bucket"
     },
     {
       "type": "neoforge:components",
       "items": "dungeontidbits:effect_extract",
       "components": {
-        "minecraft:potion_contents": {"custom_effects": [{"id": "minecraft:fire_resistance"}]}
+        "minecraft:potion_contents": {"custom_effects": [{"id": "minecraft:slowness"}]}
       },
       "strict": false
     }
   ],
   "result": {
-    "id": "minecraft:redstone",
-    "count": 3
+    "id": "minecraft:ice",
+    "count": 1
+  },
+  "extra": {
+    "id": "minecraft:bucket",
+    "count": 1
   }
 }

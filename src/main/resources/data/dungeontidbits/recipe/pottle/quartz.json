@@ -2,13 +2,13 @@
   "type": "dungeontidbits:pottle",
   "ingredients": [
     {
-      "item": "minecraft:rotten_flesh"
+      "item": "minecraft:amethyst_shard"
     },
     {
       "type": "neoforge:components",
       "items": "dungeontidbits:effect_extract",
       "components": {
-        "minecraft:potion_contents": {"custom_effects": [{"id": "minecraft:night_vision"}]}
+        "minecraft:potion_contents": {"custom_effects": [{"id": "minecraft:slow_falling"}]}
       },
       "strict": false
     },
@@ -16,13 +16,18 @@
       "type": "neoforge:components",
       "items": "dungeontidbits:effect_extract",
       "components": {
-        "minecraft:potion_contents": {"custom_effects": [{"id": "minecraft:weakness"}]}
+        "minecraft:potion_contents": {"custom_effects": [{"id": "minecraft:jump_boost"}]}
       },
       "strict": false
     }
   ],
   "result": {
-    "id": "minecraft:glowstone_dust",
+    "id": "minecraft:quartz",
+    "count": 1
+  },
+  "resultChance": 0.5,
+  "extra": {
+    "id": "minecraft:purple_dye",
     "count": 1
   }
 }

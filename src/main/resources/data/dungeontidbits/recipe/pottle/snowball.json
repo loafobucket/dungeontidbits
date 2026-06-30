@@ -2,23 +2,24 @@
   "type": "dungeontidbits:pottle",
   "ingredients": [
     {
-      "item": "minecraft:prismarine_shard"
+      "item": "minecraft:ice"
     },
     {
       "type": "neoforge:components",
       "items": "dungeontidbits:effect_extract",
       "components": {
-        "minecraft:potion_contents": {"custom_effects": [{"id": "minecraft:saturation"}]}
+        "minecraft:potion_contents": {"custom_effects": [{"id": "minecraft:weakness"}]}
       },
       "strict": false
     }
   ],
   "result": {
-    "id": "minecraft:lapis_lazuli",
-    "count": 1
+    "id": "minecraft:snowball",
+    "count": 4
   },
   "extra": {
-    "id": "minecraft:cyan_dye",
-    "count": 1
-  }
+    "id": "minecraft:snowball",
+    "count": 2
+  },
+  "extraChance": 0.5
 }

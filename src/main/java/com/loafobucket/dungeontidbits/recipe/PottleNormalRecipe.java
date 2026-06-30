@@ -1,20 +1,31 @@
 package com.loafobucket.dungeontidbits.recipe;
 
+import com.loafobucket.dungeontidbits.DungeonTidbits;
+import com.loafobucket.dungeontidbits.item.ModItems;
+import com.loafobucket.dungeontidbits.misc.ModTags;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.client.RecipeBookCategories;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
+import net.minecraft.data.recipes.RecipeCategory;
+import net.minecraft.world.item.alchemy.PotionContents;
+import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.SuspiciousEffectHolder;
 
 import java.util.Iterator;
 import java.util.List;
@@ -27,6 +38,10 @@ public class PottleNormalRecipe implements PottleRecipe {
     final Optional<Float> resultChance;
     final Optional<ItemStack> extra;
     final Optional<Float> extraChance;
+
+    public CraftingBookCategory craftingBookCategory() {
+        return CraftingBookCategory.MISC;
+    }
 
     public PottleNormalRecipe(NonNullList<Ingredient> ingredients, ItemStack result, Optional<Float> resultChance, Optional<ItemStack> extra, Optional<Float> extraChance) {
         this.ingredients = ingredients;
@@ -69,7 +84,21 @@ public class PottleNormalRecipe implements PottleRecipe {
 
     @Override
     public ItemStack assemble(PottleRecipeInput inv, HolderLookup.Provider registries) {
-        return result.copy();
+        if (inv.getItem(0).is(ModTags.Items.MODIFIED_SMALL_FLOWERS)) {
+            ItemStack flower = inv.getItem(0);
+            var result = new ItemStack(ModItems.EFFECT_EXTRACT.get());
+            if (!flower.isEmpty()) {
+                SuspiciousEffectHolder suspiciouseffectholder = SuspiciousEffectHolder.tryGet(flower.getItem());
+                if (suspiciouseffectholder != null) {
+                    MobEffectInstance suspiciouscontent = new MobEffectInstance(suspiciouseffectholder.getSuspiciousEffects().effects().getFirst().effect());
+                    result.set(DataComponents.POTION_CONTENTS, new PotionContents(Optional.empty(), Optional.empty(), List.of(suspiciouscontent)));
+                    result.setCount(Math.ceilDiv(suspiciouseffectholder.getSuspiciousEffects().effects().getFirst().duration(), 40));
+                }
+            }
+            return result;
+        } else {
+            return result.copy();
+        }
     }
 
 
@@ -112,6 +141,11 @@ public class PottleNormalRecipe implements PottleRecipe {
 
     public NonNullList<Ingredient> getIngredients() {
         return ingredients;
+    }
+
+    public static class Type implements RecipeType<PottleNormalRecipe> {
+        public static final Type INSTANCE = new Type();
+        public static final String ID = "pottle";
     }
 
     private static NonNullList<Ingredient> toNonNullList(List<Ingredient> ingredients) {

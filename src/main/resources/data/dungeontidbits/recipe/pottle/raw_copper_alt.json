@@ -2,7 +2,7 @@
   "type": "dungeontidbits:pottle",
   "ingredients": [
     {
-      "item": "minecraft:basalt"
+      "item": "minecraft:copper_ingot"
     },
     {
       "type": "neoforge:components",
@@ -11,16 +11,23 @@
         "minecraft:potion_contents": {"custom_effects": [{"id": "minecraft:wither"}]}
       },
       "strict": false
+    },
+    {
+      "type": "neoforge:components",
+      "items": "dungeontidbits:effect_extract",
+      "components": {
+        "minecraft:potion_contents": {"custom_effects": [{"id": "minecraft:fire_resistance"}]}
+      },
+      "strict": false
     }
   ],
   "result": {
-    "id": "coal",
+    "id": "minecraft:raw_copper",
     "count": 1
   },
-  "resultChance":0.5,
   "extra": {
-    "id": "minecraft:netherite_scrap",
+    "id": "minecraft:raw_copper",
     "count": 1
   },
-  "extraChance":0.1
+  "extraChance": 0.5
 }
