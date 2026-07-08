@@ -15,10 +15,6 @@ public class ModDataComponents {
     public static final DeferredRegister<DataComponentType<?>> DATA_COMPONENT_TYPES =
             DeferredRegister.createDataComponents(Registries.DATA_COMPONENT_TYPE,DungeonTidbits.MOD_ID);
 
-    public static  final DeferredHolder<DataComponentType<?>, DataComponentType<String>> ROOMDATA = register("roomdata", builder -> builder.persistent(Codec.STRING));
-    public static  final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> ROOMDEPTH = register("roomdepth", builder -> builder.persistent(Codec.INT));
-    public static  final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> HALLDEPTH = register("halldepth", builder -> builder.persistent(Codec.INT));
-
     private static <T>DeferredHolder<DataComponentType<?>, DataComponentType<T>> register(String name, UnaryOperator<DataComponentType.Builder<T>> builderOperator) {
         return DATA_COMPONENT_TYPES.register(name, () -> builderOperator.apply(DataComponentType.builder()).build());
     }

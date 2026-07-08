@@ -4,10 +4,16 @@ import mezz.jei.api.ingredients.subtypes.ISubtypeInterpreter;
 import mezz.jei.api.ingredients.subtypes.UidContext;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionContents;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 
 
 public class EffectExtractSubtypeInterpreter implements ISubtypeInterpreter<ItemStack> {
@@ -20,22 +26,25 @@ public class EffectExtractSubtypeInterpreter implements ISubtypeInterpreter<Item
     @Override
     @Nullable
     public Object getSubtypeData(ItemStack ingredient, UidContext context) {
-        PotionContents contents = ingredient.get(DataComponents.POTION_CONTENTS);
-        if (contents == null) {
-            return null;
+        PotionContents contents = ingredient.getOrDefault(DataComponents.POTION_CONTENTS, PotionContents.EMPTY);
+        if (contents == PotionContents.EMPTY) {
+            return "";
+        } else {
+            return contents.customEffects();
         }
-        return contents.potion()
-                .orElse(null);
     }
 
     @Override
     public String getLegacyStringSubtypeInfo(ItemStack ingredient, UidContext context) {
-        if (ingredient.getComponentsPatch().isEmpty()) {
+        return getStringName(ingredient);
+    }
+
+    public String getStringName(ItemStack itemStack) {
+        PotionContents contents = itemStack.getOrDefault(DataComponents.POTION_CONTENTS, PotionContents.EMPTY);
+        if (contents == PotionContents.EMPTY) {
             return "";
+        } else {
+            return contents.customEffects().getFirst().getEffect().getRegisteredName();
         }
-        PotionContents contents = ingredient.getOrDefault(DataComponents.POTION_CONTENTS, PotionContents.EMPTY);
-        String itemDescriptionId = ingredient.getItem().getDescriptionId();
-        String potionEffectId = contents.potion().map(Holder::getRegisteredName).orElse("none");
-        return itemDescriptionId + ".effect_id." + potionEffectId;
     }
 }

@@ -1,0 +1,27 @@
+{
+  "criteria": {
+    "weapon_enchant_obtain": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "#minecraft:enchantable/weapon",
+            "predicates": {
+              "minecraft:enchantments": [
+                {
+                  "enchantments": "minecraft:sharpness",
+                  "levels": {
+                    "min": 3
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  },
+  "rewards": {
+    "function": "dungeontidbits:weapon_enchant_dampening"
+  }
+}

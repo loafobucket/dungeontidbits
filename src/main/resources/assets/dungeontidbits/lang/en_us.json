@@ -2,12 +2,20 @@
   "attributes.dungeontidbits.dampening": "Dampening",
   "effect.dungeontidbits.dampening": "Dampening",
   "item.dungeontidbits.room_key": "Room Key",
+  "desc.dungeontidbits.room_key": "Obtained through cat gifts, hero of the village gifts, and wandering trader trades. Can be used on Room Gateways.",
+  "item.dungeontidbits.pottle_sherd": "Pottle Sherd",
+  "desc.dungeontidbits.pottle_sherd": "Can occasionally be found in Trail Ruins through archeology, alternatively obtained through completed Room Spawners.",
   "item.dungeontidbits.effect_extract": "Effect Extract",
+  "desc.dungeontidbits.effect_extract": "Created and used by Pottles. Variation mostly depends on the flowers available to you.",
+  "item.dungeontidbits.suspicious_effect_extract": "Suspicious Effect Extract",
+  "effect.dungeontidbits.suspicious_effect": "Perhaps you can use those flowers...",
 
   "block.dungeontidbits.room_void": "Room Void",
   "block.dungeontidbits.room_constructor": "Room Constructor",
   "block.dungeontidbits.pottle": "Pottle",
+  "desc.dungeontidbits.pottle": "A combination of pots and kettles. Creates a small effect cloud from contained Effect Extracts when powered by redstone.",
   "block.dungeontidbits.room_gateway": "Room Gateway",
+  "desc.dungeontidbits.room_gateway": "Can be found in rare-ish buried structures themed after itself. Replaces all blocks within its structure when a Room Key is used.",
 
   "block.dungeontidbits.room_wood": "Room Wood",
   "block.dungeontidbits.room_wood_stairs": "Room Wood Stairs",
@@ -19,6 +27,7 @@
   "block.dungeontidbits.room_stone_pillar": "Room Stone Pillar",
   "block.dungeontidbits.room_light": "Room Light",
   "block.dungeontidbits.room_spawner": "Room Spawner",
+  "desc.dungeontidbits.room_spawner": "Created by Room Gateways. When it is clicked on, it will try to lower your defense and melee damage with a flash and then summon a wave of mobs.",
 
   "block.dungeontidbits.slipping_tile": "Slipping Tile",
   "block.dungeontidbits.boosting_tile": "Boosting Tile",

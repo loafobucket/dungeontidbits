@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###",
+    "DPD",
+    "BCB"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:iron_nugget"
+    },
+    "D": {
+      "tag": "minecraft:decorated_pot_sherds"
+    },
+    "P": {
+      "item": "dungeontidbits:pottle_sherd"
+    },
+    "B": {
+      "item": "minecraft:brick"
+    },
+    "C": {
+      "item": "minecraft:cauldron"
+    }
+  },
+  "result": {
+    "id": "dungeontidbits:pottle"
+  }
+}

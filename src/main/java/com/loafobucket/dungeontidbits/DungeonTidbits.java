@@ -57,6 +57,7 @@ public class DungeonTidbits {
     private void addCreative(BuildCreativeModeTabContentsEvent event) {
         if(event.getTabKey() == CreativeModeTabs.INGREDIENTS) {
             event.accept(ModItems.ROOM_KEY);
+            event.accept(ModItems.POTTLE_SHERD);
             event.accept(ModItems.EFFECT_EXTRACT);
         }
         if(event.getTabKey() == CreativeModeTabs.FUNCTIONAL_BLOCKS) {

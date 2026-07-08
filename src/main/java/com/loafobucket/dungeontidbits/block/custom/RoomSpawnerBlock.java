@@ -2,10 +2,18 @@ package com.loafobucket.dungeontidbits.block.custom;
 
 import com.loafobucket.dungeontidbits.block.entity.ModBlockEntities;
 import com.loafobucket.dungeontidbits.block.entity.RoomSpawnerBlockEntity;
+import com.loafobucket.dungeontidbits.effect.ModEffects;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.FrontAndTop;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.AreaEffectCloud;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
@@ -18,14 +26,21 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
+import java.util.Optional;
+
 public class RoomSpawnerBlock extends BaseEntityBlock {
     public static final BooleanProperty TRIGGERED = BlockStateProperties.TRIGGERED;
+    public static final IntegerProperty LEVEL = BlockStateProperties.RESPAWN_ANCHOR_CHARGES;
     public static final MapCodec<RoomSpawnerBlock> CODEC = simpleCodec(RoomSpawnerBlock::new);
     public RoomSpawnerBlock(Properties properties) {
         super(properties);
+        this.registerDefaultState(((this.stateDefinition.any()).setValue(LEVEL, 0)).setValue(TRIGGERED, false));
     }
 
     @Override
@@ -35,6 +50,11 @@ public class RoomSpawnerBlock extends BaseEntityBlock {
 
     protected RenderShape getRenderShape(BlockState state) {
         return RenderShape.MODEL;
+    }
+
+    @Override
+    public @org.jetbrains.annotations.Nullable PushReaction getPistonPushReaction(BlockState state) {
+        return PushReaction.DESTROY;
     }
 
     @Nullable
@@ -49,6 +69,17 @@ public class RoomSpawnerBlock extends BaseEntityBlock {
             return InteractionResult.CONSUME;
         } else {
             level.setBlock(pos, (BlockState)state.setValue(TRIGGERED, true), 3);
+            if (state.getValue(LEVEL) != 4) {
+                AreaEffectCloud areaeffectcloud = new AreaEffectCloud(level, pos.getX()+0.5, pos.getY()+0.5, pos.getZ()+0.5);
+                areaeffectcloud.setPotionContents( new PotionContents (Optional.empty(), Optional.empty(), List.of(new MobEffectInstance(ModEffects.DAMPENING_EFFECT, 3000, 0, true, false, true))));
+                areaeffectcloud.setParticle(ParticleTypes.END_ROD);
+                areaeffectcloud.setRadius(0.5F);
+                areaeffectcloud.setRadiusOnUse(0f);
+                areaeffectcloud.setWaitTime(10);
+                areaeffectcloud.setRadiusPerTick(0.8F);
+                areaeffectcloud.setDuration(10);
+                level.addFreshEntity(areaeffectcloud);
+            }
             return InteractionResult.sidedSuccess(level.isClientSide);
         }
     }
@@ -62,14 +93,9 @@ public class RoomSpawnerBlock extends BaseEntityBlock {
         return createTickerHelper(type, ModBlockEntities.ROOM_SPAWNER_BE.get(), RoomSpawnerBlockEntity::tick);
     }
 
-    @Nullable
-    @Override
-    public BlockState getStateForPlacement(BlockPlaceContext context) {
-        return defaultBlockState().setValue(TRIGGERED, false);
-    }
-
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(TRIGGERED);
+        builder.add(LEVEL);
     }
 }

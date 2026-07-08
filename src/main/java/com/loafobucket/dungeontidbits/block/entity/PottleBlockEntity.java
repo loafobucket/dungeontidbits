@@ -113,7 +113,7 @@ public class PottleBlockEntity extends BlockEntity implements MenuProvider {
 
     protected final ContainerData data;
     private int progress = 0;
-    private int maxProgress = 20;
+    private int maxProgress = 100;
 
     private boolean isActivated(BlockState state) {
         return state.is(ModBlocks.POTTLE.get()) && state.getValue(PottleBlock.TRIGGERED);
@@ -298,7 +298,7 @@ public class PottleBlockEntity extends BlockEntity implements MenuProvider {
 
     private void resetProgress() {
         progress = 0;
-        maxProgress = 20;
+        maxProgress = 100;
     }
 
     private boolean hasRecipe() {

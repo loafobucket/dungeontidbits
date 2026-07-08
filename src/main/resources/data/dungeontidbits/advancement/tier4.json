@@ -1,0 +1,17 @@
+{
+  "criteria": {
+    "tier1": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "#dungeontidbits:tier4_items"
+          }
+        ]
+      }
+    }
+  },
+  "rewards": {
+    "function": "dungeontidbits:tier4_dampening"
+  }
+}

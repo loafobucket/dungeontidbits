@@ -1,0 +1,15 @@
+{
+  "structures": [
+    {
+      "structure": "dungeontidbits:room_gateway_space",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 60,
+    "separation": 50,
+    "spread_type": "linear",
+    "salt": 55505550
+  }
+}

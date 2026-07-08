@@ -21,14 +21,10 @@ public class ModBlocks {
             () -> new TransparentBlock(BlockBehaviour.Properties.of().strength(-1f).explosionResistance(3600000f).sound(SoundType.GLASS).lightLevel((light) -> {
                 return 3;
             })));
-    public static final DeferredBlock<Block> ROOM_CONSTRUCTOR = registerBlock("room_constructor",
-            () -> new ConstructorBlock(BlockBehaviour.Properties.of().strength(-1f).explosionResistance(3600000f).sound(SoundType.GLASS).lightLevel((light) -> {
-                return 3;
-            })));
     public static final DeferredBlock<Block> POTTLE = registerBlock("pottle",
             () -> new PottleBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.TERRACOTTA).requiresCorrectToolForDrops().strength(4f).sound(SoundType.DECORATED_POT).noOcclusion()));
     public static final DeferredBlock<Block> ROOM_GATEWAY = registerBlock("room_gateway",
-            () -> new RoomGatewayBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.SMITHING_TABLE).strength(4f).sound(SoundType.DRIPSTONE_BLOCK)));
+            () -> new RoomGatewayBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.SMITHING_TABLE).strength(25f).sound(SoundType.DRIPSTONE_BLOCK)));
 
     public static final DeferredBlock<Block> ROOM_WOOD = registerBlock("room_wood",
             () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.ACACIA_PLANKS).requiresCorrectToolForDrops()));

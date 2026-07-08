@@ -1,0 +1,1 @@
+attribute @s dungeontidbits:dampening modifier add dungeontidbits:weapon_enchant 0.2 add_value

@@ -1,5 +1,6 @@
 package com.loafobucket.dungeontidbits.block.custom;
 
+import com.loafobucket.dungeontidbits.block.ModBlocks;
 import com.loafobucket.dungeontidbits.item.ModItems;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.Util;
@@ -25,10 +26,11 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
+import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.BlockHitResult;
 
 import javax.annotation.Nullable;
-import java.util.Random;
+import java.util.*;
 
 
 public class RoomGatewayBlock extends HorizontalDirectionalBlock {
@@ -38,6 +40,10 @@ public class RoomGatewayBlock extends HorizontalDirectionalBlock {
     }
     public static final Mirror[] mirrorOption = {Mirror.NONE, Mirror.FRONT_BACK, Mirror.LEFT_RIGHT};
     public static final Rotation[] rotationOption = {Rotation.NONE, Rotation.CLOCKWISE_90, Rotation.CLOCKWISE_180, Rotation.COUNTERCLOCKWISE_90};
+    private static final int[] mainElementIndex = {0,0,1,1,2,2,3,3};
+    private static final int[] sideElementIndex = {0,1,1,2,2,3,3,0};
+    int tileSize = 5;
+    Random random = new Random();
 
     @Override
     protected MapCodec<? extends HorizontalDirectionalBlock> codec() {
@@ -60,11 +66,14 @@ public class RoomGatewayBlock extends HorizontalDirectionalBlock {
             if (stack.is(ModItems.ROOM_KEY)) {
                 stack.consume(1, player);
                 level.playSound(null, pos, SoundEvents.VAULT_INSERT_ITEM, SoundSource.BLOCKS, 1, 0.7f);
+                int element = random.nextInt(8);
                 placeBase(serverLevel, pos, state.getValue(FACING));
-                placeOne(serverLevel, pos, state.getValue(FACING));
-                placeTwo(serverLevel, pos, state.getValue(FACING));
-                placeThree(serverLevel, pos, state.getValue(FACING));
-                return ItemInteractionResult.CONSUME;
+                placeOne(serverLevel, pos, state.getValue(FACING), tileSize, random);
+                placeTwo(serverLevel, pos, state.getValue(FACING), tileSize, random);
+                placeThree(serverLevel, pos, state.getValue(FACING), tileSize, random);
+                replaceTile(serverLevel, pos, state.getValue(FACING), tileSize, element);
+                placeSpawner(serverLevel, pos, state.getValue(FACING), element);
+                return ItemInteractionResult.sidedSuccess(true);
             }
         }
         return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
@@ -100,6 +109,11 @@ public class RoomGatewayBlock extends HorizontalDirectionalBlock {
         return rotationOffset.offset(mirrorOffset);
     }
 
+    @Override
+    public @org.jetbrains.annotations.Nullable PushReaction getPistonPushReaction(BlockState state) {
+        return PushReaction.BLOCK;
+    }
+
     private void placeBase(ServerLevel serverLevel, BlockPos pos, Direction facing) {
         BlockPos centerPos = pos.offset(new Vec3i(0,0,0).relative(facing.getOpposite(), 10));
         StructureTemplate template = (StructureTemplate) serverLevel.getStructureManager().get(ResourceLocation.parse("dungeontidbits:roomreset")).orElse(null);
@@ -112,9 +126,7 @@ public class RoomGatewayBlock extends HorizontalDirectionalBlock {
         }
     }
 
-    private void placeOne(ServerLevel serverLevel, BlockPos pos, Direction facing) {
-        int tileSize = 5;
-        Random random = new Random();
+    private void placeOne(ServerLevel serverLevel, BlockPos pos, Direction facing, int tileSize, Random random) {
         BlockPos centerPos = pos.offset(new Vec3i(0,0,0).relative(facing.getOpposite(), 10));
         for  (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
@@ -137,9 +149,7 @@ public class RoomGatewayBlock extends HorizontalDirectionalBlock {
         }
     }
 
-    private void placeTwo(ServerLevel serverLevel, BlockPos pos, Direction facing) {
-        int tileSize = 5;
-        Random random = new Random();
+    private void placeTwo(ServerLevel serverLevel, BlockPos pos, Direction facing, int tileSize, Random random) {
         BlockPos centerPos = pos.offset(new Vec3i(0,0,0).relative(facing.getOpposite(), 10));
         for  (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
@@ -165,9 +175,7 @@ public class RoomGatewayBlock extends HorizontalDirectionalBlock {
         }
     }
 
-    private void placeThree(ServerLevel serverLevel, BlockPos pos, Direction facing) {
-        int tileSize = 5;
-        Random random = new Random();
+    private void placeThree(ServerLevel serverLevel, BlockPos pos, Direction facing, int tileSize, Random random) {
         BlockPos centerPos = pos.offset(new Vec3i(0,0,0).relative(facing.getOpposite(), 10));
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
@@ -204,8 +212,55 @@ public class RoomGatewayBlock extends HorizontalDirectionalBlock {
         }
     }
 
+    private void replaceTile(ServerLevel serverLevel, BlockPos pos, Direction facing, int tileSize, int element) {
+        Random random = new Random();
+        BlockPos centerPos = pos.offset(new Vec3i(0,0,0).relative(facing.getOpposite(), 10));
+        BlockState[] elements = {
+                ModBlocks.SLIPPING_TILE.get().defaultBlockState(),
+                ModBlocks.TRAPPING_TILE.get().defaultBlockState(),
+                ModBlocks.DAMAGING_TILE.get().defaultBlockState(),
+                ModBlocks.BOOSTING_TILE.get().defaultBlockState()};
+        BlockState mainElement = elements[mainElementIndex[element]];
+        BlockState sideElement = elements[sideElementIndex[element]];
+        for  (int i = -1; i <= 1; i++) {
+            for (int j = -1; j <= 1; j++) {
+                BlockPos changingPos = new BlockPos(centerPos.getX() + (tileSize * i) - 2 , pos.getY(), centerPos.getZ() + (tileSize * j) - 2);
+                double picking = random.nextDouble();
+                if (picking < 0.1) {
+                    fillBlocks(serverLevel, changingPos, mainElement, tileSize);
+                } else if (picking > 0.9) {
+                    fillBlocks(serverLevel, changingPos, sideElement, tileSize);
+                }
+            }
+        }
+    }
+
+    private void placeSpawner(ServerLevel serverLevel, BlockPos pos, Direction facing, int element) {
+        BlockPos centerPos = pos.offset(new Vec3i(0,0,0).relative(facing.getOpposite(), 10));
+        String picking = String.valueOf(element);
+        StructureTemplate template = (StructureTemplate) serverLevel.getStructureManager().get(ResourceLocation.parse("dungeontidbits:spawner_"+picking)).orElse(null);
+        Rotation rotation = Rotation.NONE;
+        Mirror mirror = Mirror.NONE;
+        BlockPos changingPos = new BlockPos(centerPos.getX(), pos.getY() + 1, centerPos.getZ());
+        if (template != null) {
+            placeStructure(serverLevel, template, changingPos, rotation, mirror);
+        }
+    }
+
     private void placeStructure(ServerLevel level, StructureTemplate structureTemplate, BlockPos pos, Rotation rotation, Mirror mirror) {
         StructurePlaceSettings structureplacesettings = new StructurePlaceSettings().setRotation(rotation).setMirror(mirror).setIgnoreEntities(true);
         structureTemplate.placeInWorld(level, pos, pos, structureplacesettings, createRandom(1), 2);
+    }
+
+    private static void fillBlocks(ServerLevel serverlevel, BlockPos pos, BlockState resultBlock, int tileSize) {
+        BlockState targetBlock = ModBlocks.ROOM_TILE.get().defaultBlockState();
+        Iterator range = BlockPos.betweenClosed(pos.getX(), pos.getY()-1, pos.getZ(), pos.getX()+tileSize-1, pos.getY()+6, pos.getZ()+tileSize-1).iterator();
+        BlockPos blockpos;
+        while(range.hasNext()) {
+            blockpos = (BlockPos)range.next();
+            if (serverlevel.getBlockState(blockpos) == targetBlock) {
+                serverlevel.setBlockAndUpdate(blockpos, resultBlock);
+            }
+        }
     }
 }

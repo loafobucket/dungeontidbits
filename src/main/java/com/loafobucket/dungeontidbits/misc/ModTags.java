@@ -16,6 +16,7 @@ public class ModTags {
     }
     public static class Items {
         public static final TagKey<Item> MODIFIED_SMALL_FLOWERS = createTag("modified_small_flowers");
+        public static final TagKey<Item> ROOM_BLOCKS = createTag("room_blocks");
 
         private static TagKey<Item> createTag(String name) {
             return ItemTags.create(ResourceLocation.fromNamespaceAndPath(DungeonTidbits.MOD_ID,name));

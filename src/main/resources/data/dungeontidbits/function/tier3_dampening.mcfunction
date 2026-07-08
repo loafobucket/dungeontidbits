@@ -1,0 +1,3 @@
+attribute @s dungeontidbits:dampening modifier add dungeontidbits:tier1 0.1 add_value
+attribute @s dungeontidbits:dampening modifier add dungeontidbits:tier2 0.15 add_value
+attribute @s dungeontidbits:dampening modifier add dungeontidbits:tier3 0.15 add_value

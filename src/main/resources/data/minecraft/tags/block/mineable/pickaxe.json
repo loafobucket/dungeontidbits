@@ -1,0 +1,17 @@
+{
+  "values": [
+    "dungeontidbits:pottle",
+    "dungeontidbits:room_gateway",
+    "dungeontidbits:room_spawner",
+    "dungeontidbits:room_light",
+    "dungeontidbits:room_stone",
+    "dungeontidbits:room_stone_pillar",
+    "dungeontidbits:room_tile",
+    "dungeontidbits:room_tile_slab",
+    "dungeontidbits:room_tile_stairs",
+    "dungeontidbits:slipping_tile",
+    "dungeontidbits:trapping_tile",
+    "dungeontidbits:damaging_tile",
+    "dungeontidbits:boosting_tile"
+  ]
+}

@@ -18,9 +18,10 @@ public class DampeningEffect extends MobEffect {
     }
 
     @Override
-    public void onEffectAdded(LivingEntity livingEntity, int amplifier) {
-        AttributeMap attributes = livingEntity.getAttributes();
-        double dampenValue = - (attributes.getValue(ModAttributes.DAMPENING) - 1) * 10;
-        addAttributeModifier(Attributes.ATTACK_DAMAGE, ResourceLocation.fromNamespaceAndPath(DungeonTidbits.MOD_ID, "effect.dampening"), dampenValue, AttributeModifier.Operation.ADD_VALUE);
+    public void onEffectStarted(LivingEntity livingEntity, int amplifier) {
+        if (livingEntity.getAttributes().hasAttribute(ModAttributes.DAMPENING)) {
+            double dampenValue = (double) -(livingEntity.getAttributes().getValue(ModAttributes.DAMPENING) * 10 - 10);
+            addAttributeModifier(Attributes.ATTACK_DAMAGE, ResourceLocation.fromNamespaceAndPath(DungeonTidbits.MOD_ID, "effect.dampening"), dampenValue, AttributeModifier.Operation.ADD_VALUE);
+        }
     }
 }

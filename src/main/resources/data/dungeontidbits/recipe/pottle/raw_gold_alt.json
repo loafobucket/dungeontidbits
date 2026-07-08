@@ -11,6 +11,22 @@
         "minecraft:potion_contents": {"custom_effects": [{"id": "minecraft:wither"}]}
       },
       "strict": false
+    },
+    {
+      "type": "neoforge:components",
+      "items": "dungeontidbits:effect_extract",
+      "components": {
+        "minecraft:potion_contents": {"custom_effects": [{"id": "minecraft:slow_falling"}]}
+      },
+      "strict": false
+    },
+    {
+      "type": "neoforge:components",
+      "items": "dungeontidbits:effect_extract",
+      "components": {
+        "minecraft:potion_contents": {"custom_effects": [{"id": "minecraft:fire_resistance"}]}
+      },
+      "strict": false
     }
   ],
   "result": {
@@ -21,5 +37,5 @@
     "id": "minecraft:raw_gold",
     "count": 1
   },
-  "extraChance": 0.5
+  "extraChance": 0.2
 }

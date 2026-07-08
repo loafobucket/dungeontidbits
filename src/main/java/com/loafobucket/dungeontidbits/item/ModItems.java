@@ -6,6 +6,7 @@ import com.loafobucket.dungeontidbits.item.custom.EffectExtractItem;
 import com.loafobucket.dungeontidbits.item.custom.RoomKeyItem;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredItem;
@@ -15,7 +16,9 @@ public class ModItems {
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(DungeonTidbits.MOD_ID);
 
     public static final DeferredItem<Item> ROOM_KEY = ITEMS.register("room_key",
-            () -> new RoomKeyItem(new Item.Properties().component(ModDataComponents.ROOMDATA.get(), "dungeontidbits:flat").component(ModDataComponents.ROOMDEPTH.get(), 1).component(ModDataComponents.HALLDEPTH.get(), 1)));
+            () -> new RoomKeyItem(new Item.Properties().rarity(Rarity.UNCOMMON)));
+    public static final DeferredItem<Item> POTTLE_SHERD = ITEMS.register("pottle_sherd",
+            () -> new RoomKeyItem(new Item.Properties()));
     public static final DeferredItem<Item> EFFECT_EXTRACT = ITEMS.register ("effect_extract",
             () -> new EffectExtractItem(new Item.Properties().component(DataComponents.POTION_CONTENTS, PotionContents.EMPTY)));
 

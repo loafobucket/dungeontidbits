@@ -1,5 +1,6 @@
 package com.loafobucket.dungeontidbits.block.entity;
 
+import com.loafobucket.dungeontidbits.DungeonTidbits;
 import com.loafobucket.dungeontidbits.block.ModBlocks;
 import com.loafobucket.dungeontidbits.block.custom.RoomSpawnerBlock;
 import com.mojang.logging.LogUtils;
@@ -7,7 +8,10 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.*;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -15,11 +19,18 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.util.random.SimpleWeightedRandomList;
 import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.SpawnData;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParam;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.phys.Vec3;
 import org.slf4j.Logger;
 
@@ -65,13 +76,17 @@ public class RoomSpawnerBlockEntity extends BlockEntity {
             boolean posset = blockEntity.posSet;
             RandomSource randomsource = level.random;
             if (activated && !posset) {
+                level.setBlock(blockPos, blockState.setValue(RoomSpawnerBlock.TRIGGERED, false), 2);
                 blockEntity.resetProgress();
+                if (blockState.getValue(RoomSpawnerBlock.LEVEL) != 4) {
+                    level.setBlock(blockPos, blockState.setValue(RoomSpawnerBlock.LEVEL, blockState.getValue(RoomSpawnerBlock.LEVEL)+1), 2);
+                } else {
+                    level.destroyBlock(blockPos, true);
+                    return;
+                }
+                level.playSound(null, blockPos,SoundEvents.CHAIN_BREAK,SoundSource.BLOCKS,1f,0.6f);
                 if (blockEntity.getPosList(serverLevel, blockPos)) {
                     blockEntity.posSet = true;
-                } else {
-                    level.destroyBlock(blockPos, false);
-                    //level.setBlock(blockPos, blockState.setValue(RoomSpawnerBlock.TRIGGERED, false), 2);
-                    //blockEntity.posSet = false ;
                 }
             } else if (activated && posset) {
                 blockEntity.progress++;
@@ -94,8 +109,8 @@ public class RoomSpawnerBlockEntity extends BlockEntity {
                         entity.moveTo(entity.getX(), entity.getY(), entity.getZ(), randomsource.nextFloat() * 360.0F, 0.0F);
                         level.addFreshEntity(entity);
                     }
-                    level.setBlock(blockPos, blockState.setValue(RoomSpawnerBlock.TRIGGERED, false), 2);
                     blockEntity.posSet = false;
+                    level.setBlock(blockPos, blockState.setValue(RoomSpawnerBlock.TRIGGERED, false), 2);
                     blockEntity.resetProgress();
                 }
             }
@@ -199,8 +214,8 @@ public class RoomSpawnerBlockEntity extends BlockEntity {
         if (posList.size() >= mobCount) {
             for (int i = 0; i < mobCount; i++) {
                 Vec3 pos = posList.get(i);
-                level.sendParticles(ParticleTypes.TRIAL_SPAWNER_DETECTED_PLAYER, pos.x ,pos.y, pos.z, 20, 0.5, 0.1, 0.5, 0);
-                level.playSound(null, pos.x, pos.y, pos.z, SoundEvents.TRIAL_SPAWNER_ABOUT_TO_SPAWN_ITEM, SoundSource.BLOCKS, 0.4f, 0.75f);
+                level.sendParticles(ParticleTypes.POOF, pos.x ,pos.y+1, pos.z, 20, 0.5, 0.5, 0.5, 0);
+                level.playSound(null, pos.x, pos.y, pos.z, SoundEvents.BELL_RESONATE, SoundSource.BLOCKS, 0.7f, 1f);
                 posListX.add(i, pos.x);
                 posListY.add(i, pos.y);
                 posListZ.add(i, pos.z);

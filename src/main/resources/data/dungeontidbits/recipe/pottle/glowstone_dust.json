@@ -31,7 +31,7 @@
   ],
   "result": {
     "id": "minecraft:glowstone_dust",
-    "count": 4
+    "count": 3
   },
-  "resultChance":0.5
+  "resultChance":0.8
 }
