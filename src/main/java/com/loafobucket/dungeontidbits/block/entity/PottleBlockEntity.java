@@ -257,9 +257,10 @@ public class PottleBlockEntity extends BlockEntity implements MenuProvider {
                             MobEffectInstance effect = new MobEffectInstance(BuiltInRegistries.MOB_EFFECT.getHolder(ResourceLocation.parse("nirvana:peace")).get(), 320, 4);
                             effectList.add(effect);
                             areaeffectcloud.setParticle(ParticleTypes.CAMPFIRE_COSY_SMOKE);
-                            areaeffectcloud.setRadius(0.3F);
-                            areaeffectcloud.setRadiusPerTick(0.002F);
-                            areaeffectcloud.setDuration(800);
+                            areaeffectcloud.setRadius(0.6F);
+                            areaeffectcloud.setRadiusPerTick(0.0015F);
+                            areaeffectcloud.setDuration(360);
+                            areaeffectcloud.setDurationOnUse(-5);
                             level.playSound(null, blockPos, SoundEvents.GENERIC_EXTINGUISH_FIRE, SoundSource.BLOCKS, 0.5f, 0.7f);
                         } else {
                             areaeffectcloud.setRadius(0.6F);
