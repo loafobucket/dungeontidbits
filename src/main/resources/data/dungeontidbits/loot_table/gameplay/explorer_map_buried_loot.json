@@ -1,0 +1,57 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:empty",
+          "weight": 2
+        },
+        {
+          "type": "item",
+          "name": "minecraft:map",
+          "weight": 1,
+          "functions": [
+            {
+              "function": "minecraft:exploration_map",
+              "destination": "dungeontidbits:on_trail_ruins_explorer_maps",
+              "decoration": "dungeontidbits:trail_ruins",
+              "skip_existing_chunks": false
+            },
+            {
+              "function": "minecraft:set_name",
+              "name": {
+                "translate": "item.dungeontidbits.trail_ruins_explorer_map",
+                "fallback": "Trail Ruins Explorer Map"
+              },
+              "target": "item_name"
+            }
+          ]
+        },
+        {
+          "type": "item",
+          "name": "minecraft:map",
+          "weight": 5,
+          "functions": [
+            {
+              "function": "minecraft:exploration_map",
+              "destination": "dungeontidbits:on_room_gateway_explorer_maps",
+              "decoration": "dungeontidbits:room_gateway_space",
+              "skip_existing_chunks": false
+            },
+            {
+              "function": "minecraft:set_name",
+              "name": {
+                "translate": "item.dungeontidbits.room_gateway_explorer_map",
+                "fallback": "Room Gateway Explorer Map"
+              },
+              "target": "item_name"
+            }
+          ]
+        }
+      ],
+      "conditions": []
+    }
+  ]
+}

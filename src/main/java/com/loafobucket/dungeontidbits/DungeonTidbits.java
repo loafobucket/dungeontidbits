@@ -7,6 +7,7 @@ import com.loafobucket.dungeontidbits.effect.ModEffects;
 import com.loafobucket.dungeontidbits.misc.ModAttributes;
 import com.loafobucket.dungeontidbits.misc.ModCapabilities;
 import com.loafobucket.dungeontidbits.item.ModItems;
+import com.loafobucket.dungeontidbits.misc.ModMapDecorationTypes;
 import com.loafobucket.dungeontidbits.recipe.ModRecipes;
 import com.loafobucket.dungeontidbits.screen.ModMenuTypes;
 import net.minecraft.world.item.CreativeModeTabs;
@@ -43,6 +44,7 @@ public class DungeonTidbits {
         ModRecipes.register(modEventBus);
         ModAttributes.register(modEventBus);
         ModEffects.register(modEventBus);
+        ModMapDecorationTypes.register(modEventBus);
 
         modEventBus.addListener(this::addCreative);
         modEventBus.addListener(ModCapabilities::registerCapabilities);

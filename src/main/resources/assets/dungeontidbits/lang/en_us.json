@@ -10,6 +10,9 @@
   "item.dungeontidbits.suspicious_effect_extract": "Suspicious Effect Extract",
   "effect.dungeontidbits.suspicious_effect": "Perhaps you can use those flowers...",
 
+  "item.dungeontidbits.trail_ruins_explorer_map": "Trail Ruins Explorer Map",
+  "item.dungeontidbits.room_gateway_explorer_map": "Room Gateway Explorer Map",
+
   "block.dungeontidbits.room_void": "Room Void",
   "block.dungeontidbits.room_constructor": "Room Constructor",
   "block.dungeontidbits.pottle": "Pottle",

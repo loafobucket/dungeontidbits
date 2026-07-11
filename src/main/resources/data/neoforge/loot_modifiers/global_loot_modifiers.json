@@ -1,7 +1,8 @@
 {
   "entries": [
     "dungeontidbits:room_key_villager_modifier",
-    "dungeontidbits:room_key_cat_modifier"
+    "dungeontidbits:room_key_cat_modifier",
+    "dungeontidbits:explorer_map_buried_modifier"
   ],
   "replace": false
 }

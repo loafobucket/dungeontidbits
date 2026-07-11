@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "values": [
+    "dungeontidbits:room_gateway",
+    "dungeontidbits:room_spawner"
+  ]
+}

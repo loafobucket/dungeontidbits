@@ -3,6 +3,7 @@ package com.loafobucket.dungeontidbits.block.entity;
 import com.loafobucket.dungeontidbits.block.ModBlocks;
 import com.loafobucket.dungeontidbits.block.custom.PottleBlock;
 import com.loafobucket.dungeontidbits.item.ModItems;
+import com.loafobucket.dungeontidbits.misc.ModTags;
 import com.loafobucket.dungeontidbits.recipe.ModRecipes;
 import com.loafobucket.dungeontidbits.recipe.PottleNormalRecipe;
 import com.loafobucket.dungeontidbits.recipe.PottleRecipe;
@@ -10,19 +11,24 @@ import com.loafobucket.dungeontidbits.recipe.PottleRecipeInput;
 import com.loafobucket.dungeontidbits.screen.custom.PottleMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.Containers;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.AreaEffectCloud;
 import net.minecraft.world.entity.player.Inventory;
@@ -35,6 +41,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.fml.ModList;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.items.IItemHandler;
@@ -46,7 +53,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
 
 public class PottleBlockEntity extends BlockEntity implements MenuProvider {
     public final ItemStackHandler itemHandler = new ItemStackHandler(6) {
@@ -228,31 +234,46 @@ public class PottleBlockEntity extends BlockEntity implements MenuProvider {
                     blockEntity.canActivate = false;
                     level.playSound(null, blockPos, SoundEvents.DECORATED_POT_INSERT, SoundSource.BLOCKS, 1, 0.7f);
                     List<MobEffectInstance> effectList = new ArrayList<>(List.of());
-                    Integer cloudDuration = 0;
+                    int cloudDuration = 0;
+                    int tickDuration = 20;
+                    if (blockEntity.itemHandler.getStackInSlot(0).is(ModTags.Items.SMOKY_ITEMS) && blockEntity.itemHandler.getStackInSlot(0).getCount()>=8) {
+                        tickDuration = 30;
+                    }
                     for (int i = 1; i < 4; i++) {
                         ItemStack itemStack = blockEntity.itemHandler.getStackInSlot(i);
                         int j = itemStack.getCount();
                         if (itemStack.is(ModItems.EFFECT_EXTRACT.get()) && !itemStack.get(DataComponents.POTION_CONTENTS).customEffects().isEmpty()) {
                             blockEntity.itemHandler.extractItem(i, Math.min(j, 16), false);
-                            MobEffectInstance effect = new MobEffectInstance(itemStack.get(DataComponents.POTION_CONTENTS).customEffects().getFirst().getEffect(), Math.min(j, 16) * 20);
+                            MobEffectInstance effect = new MobEffectInstance(itemStack.get(DataComponents.POTION_CONTENTS).customEffects().getFirst().getEffect(), Math.min(j, 16) * tickDuration);
                             effectList.add(effect);
                             cloudDuration = cloudDuration + Math.min(j, 16);
                         }
                     }
                     if (!effectList.isEmpty()) {
+                        AreaEffectCloud areaeffectcloud = new AreaEffectCloud(level, blockPos.getX(), blockPos.getY(), blockPos.getZ());
+                        if (tickDuration == 30 && ModList.get().isLoaded("nirvana")) {
+                            blockEntity.itemHandler.extractItem(0, 8, false);
+                            MobEffectInstance effect = new MobEffectInstance((Holder<MobEffect>) BuiltInRegistries.MOB_EFFECT.get(ResourceLocation.parse("nirvana:peace")), 320, 4);
+                            effectList.add(effect);
+                            areaeffectcloud.setParticle(ParticleTypes.CAMPFIRE_COSY_SMOKE);
+                            areaeffectcloud.setRadius(0.3F);
+                            areaeffectcloud.setRadiusPerTick(0.002F);
+                            areaeffectcloud.setDuration(800);
+                            level.playSound(null, blockPos, SoundEvents.GENERIC_EXTINGUISH_FIRE, SoundSource.BLOCKS, 0.5f, 0.7f);
+                        } else {
+                            areaeffectcloud.setRadius(0.6F);
+                            areaeffectcloud.setRadiusPerTick(0F);
+                            areaeffectcloud.setDuration(cloudDuration * 5);
+                            level.playSound(null, blockPos, SoundEvents.BOTTLE_EMPTY, SoundSource.BLOCKS, 1, 0.7f);
+                        }
                         PotionContents cloudEffect = new PotionContents(Optional.empty(), Optional.empty(), effectList);
                         Direction facing = blockState.getValue(PottleBlock.FACING);
                         Vec3 towards = rotateCenteredVec(new Vec3(0, -0.4F, -0.75F), facing);
-                        AreaEffectCloud areaeffectcloud = new AreaEffectCloud(level, blockPos.getX(), blockPos.getY(), blockPos.getZ());
                         areaeffectcloud.setPos(towards.add(blockPos.getCenter()));
-                        areaeffectcloud.setRadius(0.6F);
                         areaeffectcloud.setRadiusOnUse(0f);
                         areaeffectcloud.setWaitTime(10);
-                        areaeffectcloud.setRadiusPerTick(0F);
-                        areaeffectcloud.setDuration(cloudDuration * 5);
                         areaeffectcloud.setPotionContents(cloudEffect);
                         level.addFreshEntity(areaeffectcloud);
-                        level.playSound(null, blockPos, SoundEvents.BOTTLE_EMPTY, SoundSource.BLOCKS, 1, 0.7f);
                     }
                 }
             }
