@@ -30,6 +30,7 @@ import net.minecraft.world.MenuProvider;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.AreaEffectCloud;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -253,7 +254,7 @@ public class PottleBlockEntity extends BlockEntity implements MenuProvider {
                         AreaEffectCloud areaeffectcloud = new AreaEffectCloud(level, blockPos.getX(), blockPos.getY(), blockPos.getZ());
                         if (tickDuration == 30 && ModList.get().isLoaded("nirvana")) {
                             blockEntity.itemHandler.extractItem(0, 8, false);
-                            MobEffectInstance effect = new MobEffectInstance((Holder<MobEffect>) BuiltInRegistries.MOB_EFFECT.get(ResourceLocation.parse("nirvana:peace")), 320, 4);
+                            MobEffectInstance effect = new MobEffectInstance(BuiltInRegistries.MOB_EFFECT.getHolder(ResourceLocation.parse("nirvana:peace")).get(), 320, 4);
                             effectList.add(effect);
                             areaeffectcloud.setParticle(ParticleTypes.CAMPFIRE_COSY_SMOKE);
                             areaeffectcloud.setRadius(0.3F);
