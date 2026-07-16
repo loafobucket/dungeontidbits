@@ -1,6 +1,8 @@
 {
   "attributes.dungeontidbits.dampening": "Dampening",
   "effect.dungeontidbits.dampening": "Dampening",
+  "effect.dungeontidbits.dampening.description": "Increases incoming damage by your and lowers melee damage depending on your Dampening attribute.",
+
   "item.dungeontidbits.room_key": "Room Key",
   "desc.dungeontidbits.room_key": "Obtained through cat gifts, hero of the village gifts, and wandering trader trades. Can be used on Room Gateways.",
   "item.dungeontidbits.pottle_sherd": "Pottle Sherd",

@@ -240,16 +240,77 @@ public class PottleBlockEntity extends BlockEntity implements MenuProvider {
                     if (blockEntity.itemHandler.getStackInSlot(0).is(ModTags.Items.SMOKY_ITEMS) && blockEntity.itemHandler.getStackInSlot(0).getCount()>=8) {
                         tickDuration = 30;
                     }
-                    for (int i = 1; i < 4; i++) {
-                        ItemStack itemStack = blockEntity.itemHandler.getStackInSlot(i);
-                        int j = itemStack.getCount();
-                        if (itemStack.is(ModItems.EFFECT_EXTRACT.get()) && !itemStack.get(DataComponents.POTION_CONTENTS).customEffects().isEmpty()) {
-                            blockEntity.itemHandler.extractItem(i, Math.min(j, 16), false);
-                            MobEffectInstance effect = new MobEffectInstance(itemStack.get(DataComponents.POTION_CONTENTS).customEffects().getFirst().getEffect(), Math.min(j, 16) * tickDuration);
+                    ItemStack stack1 = blockEntity.itemHandler.getStackInSlot(1);
+                    ItemStack stack2 = blockEntity.itemHandler.getStackInSlot(2);
+                    ItemStack stack3 = blockEntity.itemHandler.getStackInSlot(3);
+                    int c1 = Math.min(stack1.getCount(), 16);
+                    int c2 = Math.min(stack2.getCount(), 16);
+                    int c3 = Math.min(stack3.getCount(), 16);
+                    int c123 = Math.min(Math.min(c1,c2),c3);
+                    if (ItemStack.isSameItemSameComponents(stack1,stack2) && ItemStack.isSameItemSameComponents(stack2,stack3)) {
+                        if (stack1.is(ModItems.EFFECT_EXTRACT.get()) && !stack1.get(DataComponents.POTION_CONTENTS).customEffects().isEmpty()) {
+                            blockEntity.itemHandler.extractItem(1, c123, false);
+                            blockEntity.itemHandler.extractItem(2, c123, false);
+                            blockEntity.itemHandler.extractItem(3, c123, false);
+                            MobEffectInstance effect = new MobEffectInstance(stack1.get(DataComponents.POTION_CONTENTS).customEffects().getFirst().getEffect(), c123 * tickDuration, 2);
                             effectList.add(effect);
-                            cloudDuration = cloudDuration + Math.min(j, 16);
+                            cloudDuration = cloudDuration + c123;
+                        }
+                    } else if (ItemStack.isSameItemSameComponents(stack1,stack2)) {
+                        if (stack1.is(ModItems.EFFECT_EXTRACT.get()) && !stack1.get(DataComponents.POTION_CONTENTS).customEffects().isEmpty()) {
+                            blockEntity.itemHandler.extractItem(1, Math.min(c1,c2), false);
+                            blockEntity.itemHandler.extractItem(2, Math.min(c1,c2), false);
+                            MobEffectInstance effect = new MobEffectInstance(stack1.get(DataComponents.POTION_CONTENTS).customEffects().getFirst().getEffect(), Math.min(c1,c2) * tickDuration, 1);
+                            effectList.add(effect);
+                            cloudDuration = cloudDuration + Math.min(c1,c2);
+                        }
+                        if (stack3.is(ModItems.EFFECT_EXTRACT.get()) && !stack3.get(DataComponents.POTION_CONTENTS).customEffects().isEmpty()) {
+                            blockEntity.itemHandler.extractItem(3, c3, false);
+                            MobEffectInstance effect = new MobEffectInstance(stack3.get(DataComponents.POTION_CONTENTS).customEffects().getFirst().getEffect(), c3 * tickDuration);
+                            effectList.add(effect);
+                            cloudDuration = cloudDuration + c3;
+                        }
+                    } else if (ItemStack.isSameItemSameComponents(stack1,stack3)) {
+                        if (stack1.is(ModItems.EFFECT_EXTRACT.get()) && !stack1.get(DataComponents.POTION_CONTENTS).customEffects().isEmpty()) {
+                            blockEntity.itemHandler.extractItem(1, Math.min(c1,c3), false);
+                            blockEntity.itemHandler.extractItem(3, Math.min(c1,c3), false);
+                            MobEffectInstance effect = new MobEffectInstance(stack1.get(DataComponents.POTION_CONTENTS).customEffects().getFirst().getEffect(), Math.min(c1,c3) * tickDuration, 1);
+                            effectList.add(effect);
+                            cloudDuration = cloudDuration + Math.min(c1,c3);
+                        }
+                        if (stack2.is(ModItems.EFFECT_EXTRACT.get()) && !stack2.get(DataComponents.POTION_CONTENTS).customEffects().isEmpty()) {
+                            blockEntity.itemHandler.extractItem(2, c2, false);
+                            MobEffectInstance effect = new MobEffectInstance(stack2.get(DataComponents.POTION_CONTENTS).customEffects().getFirst().getEffect(), c2 * tickDuration);
+                            effectList.add(effect);
+                            cloudDuration = cloudDuration + c2;
+                        }
+                    } else if (ItemStack.isSameItemSameComponents(stack2,stack3)) {
+                        if (stack2.is(ModItems.EFFECT_EXTRACT.get()) && !stack2.get(DataComponents.POTION_CONTENTS).customEffects().isEmpty()) {
+                            blockEntity.itemHandler.extractItem(2, Math.min(c2,c3), false);
+                            blockEntity.itemHandler.extractItem(3, Math.min(c2,c3), false);
+                            MobEffectInstance effect = new MobEffectInstance(stack2.get(DataComponents.POTION_CONTENTS).customEffects().getFirst().getEffect(), Math.min(c2,c3) * tickDuration, 1);
+                            effectList.add(effect);
+                            cloudDuration = cloudDuration + Math.min(c2,c3);
+                        }
+                        if (stack1.is(ModItems.EFFECT_EXTRACT.get()) && !stack1.get(DataComponents.POTION_CONTENTS).customEffects().isEmpty()) {
+                            blockEntity.itemHandler.extractItem(1, c1, false);
+                            MobEffectInstance effect = new MobEffectInstance(stack1.get(DataComponents.POTION_CONTENTS).customEffects().getFirst().getEffect(), c1 * tickDuration);
+                            effectList.add(effect);
+                            cloudDuration = cloudDuration + c1;
+                        }
+                    } else {
+                        for (int i = 1; i < 4; i++) {
+                            ItemStack itemStack = blockEntity.itemHandler.getStackInSlot(i);
+                            int j = itemStack.getCount();
+                            if (itemStack.is(ModItems.EFFECT_EXTRACT.get()) && !itemStack.get(DataComponents.POTION_CONTENTS).customEffects().isEmpty()) {
+                                blockEntity.itemHandler.extractItem(i, Math.min(j, 16), false);
+                                MobEffectInstance effect = new MobEffectInstance(itemStack.get(DataComponents.POTION_CONTENTS).customEffects().getFirst().getEffect(), Math.min(j, 16) * tickDuration);
+                                effectList.add(effect);
+                                cloudDuration = cloudDuration + Math.min(j, 16);
+                            }
                         }
                     }
+
                     if (!effectList.isEmpty()) {
                         AreaEffectCloud areaeffectcloud = new AreaEffectCloud(level, blockPos.getX(), blockPos.getY(), blockPos.getZ());
                         if (tickDuration == 30 && ModList.get().isLoaded("nirvana")) {
