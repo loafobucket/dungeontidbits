@@ -252,7 +252,7 @@ public class PottleBlockEntity extends BlockEntity implements MenuProvider {
                             blockEntity.itemHandler.extractItem(1, c123, false);
                             blockEntity.itemHandler.extractItem(2, c123, false);
                             blockEntity.itemHandler.extractItem(3, c123, false);
-                            MobEffectInstance effect = new MobEffectInstance(stack1.get(DataComponents.POTION_CONTENTS).customEffects().getFirst().getEffect(), c123 * tickDuration, 2);
+                            MobEffectInstance effect = new MobEffectInstance(stack1.get(DataComponents.POTION_CONTENTS).customEffects().getFirst().getEffect(), c123 * tickDuration / 5, 2);
                             effectList.add(effect);
                             cloudDuration = cloudDuration + c123;
                         }
@@ -260,7 +260,7 @@ public class PottleBlockEntity extends BlockEntity implements MenuProvider {
                         if (stack1.is(ModItems.EFFECT_EXTRACT.get()) && !stack1.get(DataComponents.POTION_CONTENTS).customEffects().isEmpty()) {
                             blockEntity.itemHandler.extractItem(1, Math.min(c1,c2), false);
                             blockEntity.itemHandler.extractItem(2, Math.min(c1,c2), false);
-                            MobEffectInstance effect = new MobEffectInstance(stack1.get(DataComponents.POTION_CONTENTS).customEffects().getFirst().getEffect(), Math.min(c1,c2) * tickDuration, 1);
+                            MobEffectInstance effect = new MobEffectInstance(stack1.get(DataComponents.POTION_CONTENTS).customEffects().getFirst().getEffect(), Math.min(c1,c2) * tickDuration / 2, 1);
                             effectList.add(effect);
                             cloudDuration = cloudDuration + Math.min(c1,c2);
                         }
@@ -274,7 +274,7 @@ public class PottleBlockEntity extends BlockEntity implements MenuProvider {
                         if (stack1.is(ModItems.EFFECT_EXTRACT.get()) && !stack1.get(DataComponents.POTION_CONTENTS).customEffects().isEmpty()) {
                             blockEntity.itemHandler.extractItem(1, Math.min(c1,c3), false);
                             blockEntity.itemHandler.extractItem(3, Math.min(c1,c3), false);
-                            MobEffectInstance effect = new MobEffectInstance(stack1.get(DataComponents.POTION_CONTENTS).customEffects().getFirst().getEffect(), Math.min(c1,c3) * tickDuration, 1);
+                            MobEffectInstance effect = new MobEffectInstance(stack1.get(DataComponents.POTION_CONTENTS).customEffects().getFirst().getEffect(), Math.min(c1,c3) * tickDuration / 2, 1);
                             effectList.add(effect);
                             cloudDuration = cloudDuration + Math.min(c1,c3);
                         }
@@ -288,7 +288,7 @@ public class PottleBlockEntity extends BlockEntity implements MenuProvider {
                         if (stack2.is(ModItems.EFFECT_EXTRACT.get()) && !stack2.get(DataComponents.POTION_CONTENTS).customEffects().isEmpty()) {
                             blockEntity.itemHandler.extractItem(2, Math.min(c2,c3), false);
                             blockEntity.itemHandler.extractItem(3, Math.min(c2,c3), false);
-                            MobEffectInstance effect = new MobEffectInstance(stack2.get(DataComponents.POTION_CONTENTS).customEffects().getFirst().getEffect(), Math.min(c2,c3) * tickDuration, 1);
+                            MobEffectInstance effect = new MobEffectInstance(stack2.get(DataComponents.POTION_CONTENTS).customEffects().getFirst().getEffect(), Math.min(c2,c3) * tickDuration / 2, 1);
                             effectList.add(effect);
                             cloudDuration = cloudDuration + Math.min(c2,c3);
                         }
