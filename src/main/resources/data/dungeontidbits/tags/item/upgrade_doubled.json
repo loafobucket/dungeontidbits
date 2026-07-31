@@ -1,0 +1,13 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:golden_helmet",
+    "minecraft:golden_chestplate",
+    "minecraft:golden_leggings",
+    "minecraft:golden_boots",
+    "dungeontidbits:reinforced_golden_helmet",
+    "dungeontidbits:reinforced_golden_chestplate",
+    "dungeontidbits:reinforced_golden_leggings",
+    "dungeontidbits:reinforced_golden_boots"
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "asset_id": "dungeontidbits:framed",
+  "decal": false,
+  "description": {
+    "translate": "trim_pattern.dungeontidbits.framed"
+  },
+  "template_item": "dungeontidbits:upgrade_framed"
+}

@@ -1,0 +1,29 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:leather_helmet",
+    "minecraft:leather_chestplate",
+    "minecraft:leather_leggings",
+    "minecraft:leather_boots",
+    "dungeontidbits:reinforced_leather_helmet",
+    "dungeontidbits:reinforced_leather_chestplate",
+    "dungeontidbits:reinforced_leather_leggings",
+    "dungeontidbits:reinforced_leather_boots",
+    "dungeontidbits:fortified_leather_helmet",
+    "dungeontidbits:fortified_leather_chestplate",
+    "dungeontidbits:fortified_leather_leggings",
+    "dungeontidbits:fortified_leather_boots",
+    "minecraft:chainmail_helmet",
+    "minecraft:chainmail_chestplate",
+    "minecraft:chainmail_leggings",
+    "minecraft:chainmail_boots",
+    "minecraft:golden_helmet",
+    "minecraft:golden_chestplate",
+    "minecraft:golden_leggings",
+    "minecraft:golden_boots",
+    "dungeontidbits:reinforced_golden_helmet",
+    "dungeontidbits:reinforced_golden_chestplate",
+    "dungeontidbits:reinforced_golden_leggings",
+    "dungeontidbits:reinforced_golden_boots"
+  ]
+}

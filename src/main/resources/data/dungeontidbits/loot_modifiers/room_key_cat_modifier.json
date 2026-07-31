@@ -6,5 +6,5 @@
           "loot_table_id": "minecraft:gameplay/cat_morning_gift"
     }
   ],
-  "table": "dungeontidbits:gameplay/room_key_cat_loot"
+  "table": "dungeontidbits:addon/room_key_cat_loot"
 }

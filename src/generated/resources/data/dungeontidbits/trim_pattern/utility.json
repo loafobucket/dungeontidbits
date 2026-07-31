@@ -1,0 +1,8 @@
+{
+  "asset_id": "dungeontidbits:utility",
+  "decal": false,
+  "description": {
+    "translate": "trim_pattern.dungeontidbits.utility"
+  },
+  "template_item": "dungeontidbits:upgrade_utility"
+}

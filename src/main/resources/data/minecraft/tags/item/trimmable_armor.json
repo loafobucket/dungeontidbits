@@ -1,0 +1,17 @@
+{
+  "replace": false,
+  "values": [
+    "dungeontidbits:reinforced_leather_helmet",
+    "dungeontidbits:reinforced_leather_chestplate",
+    "dungeontidbits:reinforced_leather_leggings",
+    "dungeontidbits:reinforced_leather_boots",
+    "dungeontidbits:fortified_leather_helmet",
+    "dungeontidbits:fortified_leather_chestplate",
+    "dungeontidbits:fortified_leather_leggings",
+    "dungeontidbits:fortified_leather_boots",
+    "dungeontidbits:reinforced_golden_helmet",
+    "dungeontidbits:reinforced_golden_chestplate",
+    "dungeontidbits:reinforced_golden_leggings",
+    "dungeontidbits:reinforced_golden_boots"
+  ]
+}

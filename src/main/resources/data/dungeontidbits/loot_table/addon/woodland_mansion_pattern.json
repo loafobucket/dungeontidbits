@@ -1,0 +1,45 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "dungeontidbits:upgrade_reinforced",
+          "weight": 7
+        },
+        {
+          "type": "minecraft:item",
+          "name": "dungeontidbits:upgrade_vitality",
+          "weight": 5
+        },
+        {
+          "type": "minecraft:item",
+          "name": "dungeontidbits:upgrade_utility",
+          "weight": 3
+        },
+        {
+          "type": "minecraft:item",
+          "name": "dungeontidbits:upgrade_agility",
+          "weight": 3
+        },
+        {
+          "type": "minecraft:item",
+          "name": "dungeontidbits:upgrade_framed",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "dungeontidbits:upgrade_fortified",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:empty",
+          "weight": 40
+        }
+      ]
+    }
+  ],
+  "functions": []
+}

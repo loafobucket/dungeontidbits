@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:smithing_transform",
+  "base": {
+    "item": "dungeontidbits:reinforced_leather_leggings"
+  },
+  "addition": {
+    "item": "minecraft:ominous_bottle"
+  },
+  "template": {
+    "item": "dungeontidbits:upgrade_fortified"
+  },
+  "result": {
+    "id": "dungeontidbits:fortified_leather_leggings"
+  }
+}

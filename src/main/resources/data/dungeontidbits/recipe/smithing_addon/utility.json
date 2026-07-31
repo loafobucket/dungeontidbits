@@ -1,0 +1,21 @@
+{
+  "type": "dungeontidbits:smithing_addon",
+  "base": {
+    "tag": "minecraft:trimmable_armor"
+  },
+  "addition": {
+    "item": "minecraft:lapis_lazuli"
+  },
+  "template": {
+    "item": "dungeontidbits:upgrade_utility"
+  },
+  "result": {
+    "id": "minecraft:leather_chestplate",
+    "components": {
+      "minecraft:trim": {
+        "material": "minecraft:lapis",
+        "pattern": "dungeontidbits:utility"
+      }
+    }
+  }
+}

@@ -23,6 +23,15 @@ public class ModRecipes {
                     return "pottle";
                 }
             });
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<SmithingAddonRecipe>> SMITHING_ADDON_SERIALIZER =
+            SERIALIZERS.register("smithing_addon", SmithingAddonRecipe.Serializer::new);
+    public static final DeferredHolder<RecipeType<?>, RecipeType<SmithingAddonRecipe>> SMITHING_ADDON_TYPE =
+            TYPES.register("smithing_addon", () -> new RecipeType<SmithingAddonRecipe>() {
+                @Override
+                public String toString() {
+                    return "smithing_addon";
+                }
+            });
     public static void register(IEventBus eventBus) {
         SERIALIZERS.register(eventBus);
         TYPES.register(eventBus);

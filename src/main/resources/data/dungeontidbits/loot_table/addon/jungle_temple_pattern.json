@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "dungeontidbits:upgrade_vitality",
+          "weight": 3
+        },
+        {
+          "type": "minecraft:empty",
+          "weight": 1
+        }
+      ]
+    }
+  ],
+  "functions": []
+}

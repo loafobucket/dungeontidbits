@@ -2,7 +2,14 @@
   "entries": [
     "dungeontidbits:room_key_villager_modifier",
     "dungeontidbits:room_key_cat_modifier",
-    "dungeontidbits:explorer_map_buried_modifier"
+    "dungeontidbits:abandoned_mineshaft_modifier",
+    "dungeontidbits:ancient_city_modifier",
+    "dungeontidbits:igloo_chest_modifier",
+    "dungeontidbits:jungle_temple_modifier",
+    "dungeontidbits:underwater_ruin_big_modifier",
+    "dungeontidbits:pillager_outpost_modifier",
+    "dungeontidbits:ruined_portal_modifier",
+    "dungeontidbits:woodland_mansion_modifier"
   ],
   "replace": false
 }

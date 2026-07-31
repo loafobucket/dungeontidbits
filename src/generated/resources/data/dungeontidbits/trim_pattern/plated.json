@@ -1,0 +1,8 @@
+{
+  "asset_id": "dungeontidbits:plated",
+  "decal": false,
+  "description": {
+    "translate": "trim_pattern.dungeontidbits.plated"
+  },
+  "template_item": "dungeontidbits:upgrade_plated"
+}

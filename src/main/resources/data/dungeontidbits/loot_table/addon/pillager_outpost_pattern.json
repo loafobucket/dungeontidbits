@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "dungeontidbits:upgrade_reinforcement",
+          "weight": 4
+        },
+        {
+          "type": "minecraft:item",
+          "name": "dungeontidbits:upgrade_vitality",
+          "weight": 2
+        },
+        {
+          "type": "minecraft:empty",
+          "weight": 2
+        }
+      ]
+    }
+  ],
+  "functions": []
+}

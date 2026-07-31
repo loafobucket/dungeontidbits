@@ -40,6 +40,59 @@
       ]
     },
     {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "dungeontidbits:upgrade_reinforced",
+          "weight": 6
+        },
+        {
+          "type": "minecraft:item",
+          "name": "dungeontidbits:upgrade_vitality",
+          "weight": 3
+        },
+        {
+          "type": "minecraft:item",
+          "name": "dungeontidbits:upgrade_utility",
+          "weight": 3
+        },
+        {
+          "type": "minecraft:item",
+          "name": "dungeontidbits:upgrade_agility",
+          "weight": 3
+        },
+        {
+          "type": "minecraft:item",
+          "name": "dungeontidbits:upgrade_plated",
+          "weight": 2
+        },
+        {
+          "type": "minecraft:item",
+          "name": "dungeontidbits:upgrade_framed",
+          "weight": 2
+        },
+        {
+          "type": "minecraft:item",
+          "name": "dungeontidbits:upgrade_fortified",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:empty",
+          "weight": 20
+        }
+      ],
+      "conditions": [
+        {
+          "condition": "minecraft:block_state_property",
+          "block": "dungeontidbits:room_spawner",
+          "properties": {
+            "charges": "4"
+          }
+        }
+      ]
+    },
+    {
       "rolls": {
         "min": 2,
         "max": 4

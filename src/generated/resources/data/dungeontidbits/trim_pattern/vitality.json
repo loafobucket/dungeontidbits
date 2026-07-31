@@ -1,0 +1,8 @@
+{
+  "asset_id": "dungeontidbits:vitality",
+  "decal": false,
+  "description": {
+    "translate": "trim_pattern.dungeontidbits.vitality"
+  },
+  "template_item": "dungeontidbits:upgrade_vitality"
+}

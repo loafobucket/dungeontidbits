@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:smithing_transform",
+  "base": {
+    "item": "minecraft:leather_helmet"
+  },
+  "addition": {
+    "item": "minecraft:copper_ingot"
+  },
+  "template": {
+    "item": "dungeontidbits:upgrade_reinforced"
+  },
+  "result": {
+    "id": "dungeontidbits:reinforced_leather_helmet"
+  }
+}

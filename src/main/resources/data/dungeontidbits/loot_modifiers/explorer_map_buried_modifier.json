@@ -6,5 +6,5 @@
           "loot_table_id": "minecraft:chests/buried_treasure"
     }
   ],
-  "table": "dungeontidbits:gameplay/explorer_map_buried_loot"
+  "table": "dungeontidbits:addon/explorer_map_buried_loot"
 }

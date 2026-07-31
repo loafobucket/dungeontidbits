@@ -1,0 +1,21 @@
+{
+  "type": "dungeontidbits:smithing_addon",
+  "base": {
+    "tag": "minecraft:trimmable_armor"
+  },
+  "addition": {
+    "item": "minecraft:emerald"
+  },
+  "template": {
+    "item": "dungeontidbits:upgrade_vitality"
+  },
+  "result": {
+    "id": "minecraft:leather_chestplate",
+    "components": {
+      "minecraft:trim": {
+        "material": "minecraft:emerald",
+        "pattern": "dungeontidbits:vitality"
+      }
+    }
+  }
+}

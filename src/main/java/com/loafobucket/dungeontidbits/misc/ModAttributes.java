@@ -16,7 +16,7 @@ public class ModAttributes {
             1.0d,
             0.0d,
             100.0d
-    ));
+    ).setSentiment(Attribute.Sentiment.NEGATIVE));
 
     public static void register(IEventBus eventBus) {
         ATTRIBUTES.register(eventBus);

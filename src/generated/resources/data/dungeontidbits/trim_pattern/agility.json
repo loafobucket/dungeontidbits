@@ -1,0 +1,8 @@
+{
+  "asset_id": "dungeontidbits:agility",
+  "decal": false,
+  "description": {
+    "translate": "trim_pattern.dungeontidbits.agility"
+  },
+  "template_item": "dungeontidbits:upgrade_agility"
+}

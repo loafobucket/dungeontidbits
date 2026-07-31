@@ -11,6 +11,39 @@
   "desc.dungeontidbits.effect_extract": "Created and used by Pottles. Variation mostly depends on the flowers available to you.",
   "item.dungeontidbits.suspicious_effect_extract": "Suspicious Effect Extract",
   "effect.dungeontidbits.suspicious_effect": "Perhaps you can use those flowers...",
+  "item.dungeontidbits.sparkling_axe": "Sparkling Axe",
+
+  "item.dungeontidbits.reinforced_leather_helmet": "Reinforced Leather Cap",
+  "item.dungeontidbits.reinforced_leather_chestplate": "Reinforced Leather Tunic",
+  "item.dungeontidbits.reinforced_leather_leggings": "Reinforced Leather Pants",
+  "item.dungeontidbits.reinforced_leather_boots": "Reinforced Leather Boots",
+  "item.dungeontidbits.fortified_leather_helmet": "Fortified Leather Cap",
+  "item.dungeontidbits.fortified_leather_chestplate": "Fortified Leather Tunic",
+  "item.dungeontidbits.fortified_leather_leggings": "Fortified Leather Pants",
+  "item.dungeontidbits.fortified_leather_boots": "Fortified Leather Boots",
+  "item.dungeontidbits.reinforced_golden_helmet": "Reinforced Golden Helmet",
+  "item.dungeontidbits.reinforced_golden_chestplate": "Reinforced Golden Chestplate",
+  "item.dungeontidbits.reinforced_golden_leggings": "Reinforced Golden Leggings",
+  "item.dungeontidbits.reinforced_golden_boots": "Reinforced Golden Boots",
+  "item.dungeontidbits.upgrade_reinforced": "Reinforced Upgrade Pattern",
+  "item.dungeontidbits.upgrade_fortified": "Fortified Upgrade Pattern",
+  "item.dungeontidbits.upgrade_vitality": "Vitality Upgrade Pattern",
+  "item.dungeontidbits.upgrade_utility": "Utility Upgrade Pattern",
+  "item.dungeontidbits.upgrade_agility": "Agility Upgrade Pattern",
+  "item.dungeontidbits.upgrade_plated": "Plated Upgrade Pattern",
+  "item.dungeontidbits.upgrade_framed": "Framed Upgrade Pattern",
+
+  "trim_pattern.dungeontidbits.vitality": "Vitality Upgrade",
+  "trim_pattern.dungeontidbits.utility": "Utility Upgrade",
+  "trim_pattern.dungeontidbits.agility": "Agility Upgrade",
+  "trim_pattern.dungeontidbits.plated": "Plated Upgrade",
+  "trim_pattern.dungeontidbits.framed": "Framed Upgrade",
+  "trim_material.dungeontidbits.prismarine": "Prismarine Material",
+
+  "upgrade_pattern.dungeontidbits.description": "Applies attribute to:",
+  "upgrade_pattern.dungeontidbits.reinforced_list": "Leather and Golden Armor",
+  "upgrade_pattern.dungeontidbits.fortified_list": "Reinforced Leather Armor",
+  "upgrade_pattern.dungeontidbits.modified_list": "Leather, Chainmail and Golden Armor",
 
   "item.dungeontidbits.trail_ruins_explorer_map": "Trail Ruins Explorer Map",
   "item.dungeontidbits.room_gateway_explorer_map": "Room Gateway Explorer Map",
@@ -37,5 +70,7 @@
   "block.dungeontidbits.slipping_tile": "Slipping Tile",
   "block.dungeontidbits.boosting_tile": "Boosting Tile",
   "block.dungeontidbits.trapping_tile": "Trapping Tile",
-  "block.dungeontidbits.damaging_tile": "Damaging Tile"
+  "block.dungeontidbits.damaging_tile": "Damaging Tile",
+
+  "entity.dungeontidbits.sparkle": "Sparkle"
 }

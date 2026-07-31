@@ -4,6 +4,7 @@ import com.loafobucket.dungeontidbits.block.ModBlocks;
 import com.loafobucket.dungeontidbits.block.entity.ModBlockEntities;
 import com.loafobucket.dungeontidbits.component.ModDataComponents;
 import com.loafobucket.dungeontidbits.effect.ModEffects;
+import com.loafobucket.dungeontidbits.entity.ModEntities;
 import com.loafobucket.dungeontidbits.misc.ModAttributes;
 import com.loafobucket.dungeontidbits.misc.ModCapabilities;
 import com.loafobucket.dungeontidbits.item.ModItems;
@@ -45,6 +46,7 @@ public class DungeonTidbits {
         ModAttributes.register(modEventBus);
         ModEffects.register(modEventBus);
         ModMapDecorationTypes.register(modEventBus);
+        ModEntities.register(modEventBus);
 
         modEventBus.addListener(this::addCreative);
         modEventBus.addListener(ModCapabilities::registerCapabilities);
@@ -61,6 +63,13 @@ public class DungeonTidbits {
             event.accept(ModItems.ROOM_KEY);
             event.accept(ModItems.POTTLE_SHERD);
             event.accept(ModItems.EFFECT_EXTRACT);
+            event.accept(ModItems.UPGRADE_REINFORCED);
+            event.accept(ModItems.UPGRADE_FORTIFIED);
+            event.accept(ModItems.UPGRADE_VITALITY);
+            event.accept(ModItems.UPGRADE_UTILITY);
+            event.accept(ModItems.UPGRADE_AGILITY);
+            event.accept(ModItems.UPGRADE_PLATED);
+            event.accept(ModItems.UPGRADE_FRAMED);
         }
         if(event.getTabKey() == CreativeModeTabs.FUNCTIONAL_BLOCKS) {
             event.accept(ModBlocks.POTTLE);
@@ -82,6 +91,21 @@ public class DungeonTidbits {
             event.accept(ModBlocks.BOOSTING_TILE);
             event.accept(ModBlocks.TRAPPING_TILE);
             event.accept(ModBlocks.DAMAGING_TILE);
+        }
+        if(event.getTabKey() == CreativeModeTabs.COMBAT) {
+            event.accept(ModItems.SPARKLING_AXE);
+            event.accept(ModItems.REINFORCED_LEATHER_HELMET);
+            event.accept(ModItems.REINFORCED_LEATHER_CHESTPLATE);
+            event.accept(ModItems.REINFORCED_LEATHER_LEGGINGS);
+            event.accept(ModItems.REINFORCED_LEATHER_BOOTS);
+            event.accept(ModItems.FORTIFIED_LEATHER_HELMET);
+            event.accept(ModItems.FORTIFIED_LEATHER_CHESTPLATE);
+            event.accept(ModItems.FORTIFIED_LEATHER_LEGGINGS);
+            event.accept(ModItems.FORTIFIED_LEATHER_BOOTS);
+            event.accept(ModItems.REINFORCED_GOLDEN_HELMET);
+            event.accept(ModItems.REINFORCED_GOLDEN_CHESTPLATE);
+            event.accept(ModItems.REINFORCED_GOLDEN_LEGGINGS);
+            event.accept(ModItems.REINFORCED_GOLDEN_BOOTS);
         }
     }
 

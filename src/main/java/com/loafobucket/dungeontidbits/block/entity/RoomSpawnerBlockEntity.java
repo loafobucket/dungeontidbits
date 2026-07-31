@@ -1,6 +1,6 @@
 package com.loafobucket.dungeontidbits.block.entity;
 
-import com.loafobucket.dungeontidbits.DungeonTidbits;
+import com.loafobucket.dungeontidbits.Config;
 import com.loafobucket.dungeontidbits.block.ModBlocks;
 import com.loafobucket.dungeontidbits.block.custom.RoomSpawnerBlock;
 import com.mojang.logging.LogUtils;
@@ -8,10 +8,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.*;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -19,18 +16,11 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.util.random.SimpleWeightedRandomList;
 import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.SpawnData;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.storage.loot.LootContext;
-import net.minecraft.world.level.storage.loot.LootParams;
-import net.minecraft.world.level.storage.loot.LootTable;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParam;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.phys.Vec3;
 import org.slf4j.Logger;
 
@@ -40,7 +30,7 @@ import java.util.*;
 //a whole lot of copying from BaseSpawner
 public class RoomSpawnerBlockEntity extends BlockEntity {
     public Random random = new Random();
-    public int mobCount = 4;
+    public static int mobCount = 4;
     private static final Logger LOGGER = LogUtils.getLogger();
 
     private boolean posSet = false;
@@ -92,7 +82,7 @@ public class RoomSpawnerBlockEntity extends BlockEntity {
                 blockEntity.progress++;
                 setChanged(level, blockPos, blockState);
                 if (blockEntity.progress >= blockEntity.maxProgress) {
-                    for (int i = 0; i < blockEntity.mobCount; i++) {
+                    for (int i = 0; i < mobCount; i++) {
                         Vec3 pos = new Vec3(blockEntity.posListX.get(i),blockEntity.posListY.get(i),blockEntity.posListZ.get(i));
                         SpawnData spawndata = blockEntity.createNextSpawnData(serverLevel, randomsource, blockPos);
                         CompoundTag compoundtag = spawndata.getEntityToSpawn();
@@ -195,7 +185,7 @@ public class RoomSpawnerBlockEntity extends BlockEntity {
     }
 
     public boolean getPosList(ServerLevel level, BlockPos blockPos) {
-        int attempts = 12;
+        int attempts = mobCount * 3;
         int spawnRange = 7;
         ArrayList<Vec3> posList = new ArrayList<>();
         for (int i = 0; i < attempts; ++i) {

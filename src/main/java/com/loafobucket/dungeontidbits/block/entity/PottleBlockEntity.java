@@ -1,5 +1,6 @@
 package com.loafobucket.dungeontidbits.block.entity;
 
+import com.loafobucket.dungeontidbits.Config;
 import com.loafobucket.dungeontidbits.block.ModBlocks;
 import com.loafobucket.dungeontidbits.block.custom.PottleBlock;
 import com.loafobucket.dungeontidbits.item.ModItems;
@@ -11,7 +12,6 @@ import com.loafobucket.dungeontidbits.recipe.PottleRecipeInput;
 import com.loafobucket.dungeontidbits.screen.custom.PottleMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
@@ -28,9 +28,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.Containers;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.SimpleContainer;
-import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.AreaEffectCloud;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -117,6 +115,7 @@ public class PottleBlockEntity extends BlockEntity implements MenuProvider {
     public static final int LAST_INPUT_SLOT = 3;
     public static final int OUTPUT_SLOT = 4;
     public static final int EXTRA_SLOT = 5;
+    public static final int EFFECT_EXTRACT_USAGE = Config.EFFECT_EXTRACT_USAGE.getAsInt();
 
     protected final ContainerData data;
     private int progress = 0;
@@ -243,9 +242,9 @@ public class PottleBlockEntity extends BlockEntity implements MenuProvider {
                     ItemStack stack1 = blockEntity.itemHandler.getStackInSlot(1);
                     ItemStack stack2 = blockEntity.itemHandler.getStackInSlot(2);
                     ItemStack stack3 = blockEntity.itemHandler.getStackInSlot(3);
-                    int c1 = Math.min(stack1.getCount(), 16);
-                    int c2 = Math.min(stack2.getCount(), 16);
-                    int c3 = Math.min(stack3.getCount(), 16);
+                    int c1 = Math.min(stack1.getCount(), EFFECT_EXTRACT_USAGE);
+                    int c2 = Math.min(stack2.getCount(), EFFECT_EXTRACT_USAGE);
+                    int c3 = Math.min(stack3.getCount(), EFFECT_EXTRACT_USAGE);
                     int c123 = Math.min(Math.min(c1,c2),c3);
                     if (ItemStack.isSameItemSameComponents(stack1,stack2) && ItemStack.isSameItemSameComponents(stack2,stack3)) {
                         if (stack1.is(ModItems.EFFECT_EXTRACT.get()) && !stack1.get(DataComponents.POTION_CONTENTS).customEffects().isEmpty()) {
@@ -303,8 +302,8 @@ public class PottleBlockEntity extends BlockEntity implements MenuProvider {
                             ItemStack itemStack = blockEntity.itemHandler.getStackInSlot(i);
                             int j = itemStack.getCount();
                             if (itemStack.is(ModItems.EFFECT_EXTRACT.get()) && !itemStack.get(DataComponents.POTION_CONTENTS).customEffects().isEmpty()) {
-                                blockEntity.itemHandler.extractItem(i, Math.min(j, 16), false);
-                                MobEffectInstance effect = new MobEffectInstance(itemStack.get(DataComponents.POTION_CONTENTS).customEffects().getFirst().getEffect(), Math.min(j, 16) * tickDuration);
+                                blockEntity.itemHandler.extractItem(i, Math.min(j, EFFECT_EXTRACT_USAGE), false);
+                                MobEffectInstance effect = new MobEffectInstance(itemStack.get(DataComponents.POTION_CONTENTS).customEffects().getFirst().getEffect(), Math.min(j, EFFECT_EXTRACT_USAGE) * tickDuration);
                                 effectList.add(effect);
                                 cloudDuration = cloudDuration + Math.min(j, 16);
                             }

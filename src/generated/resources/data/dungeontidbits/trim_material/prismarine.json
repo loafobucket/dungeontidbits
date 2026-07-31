@@ -1,0 +1,9 @@
+{
+  "asset_name": "prismarine",
+  "description": {
+    "color": "#91C2AC",
+    "translate": "trim_material.dungeontidbits.prismarine"
+  },
+  "ingredient": "minecraft:prismarine",
+  "item_model_index": 0.8
+}
