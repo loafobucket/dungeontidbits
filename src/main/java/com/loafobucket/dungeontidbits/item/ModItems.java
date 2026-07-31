@@ -47,7 +47,7 @@ public class ModItems {
                     .build())));
     public static final DeferredItem<Item> UPGRADE_VITALITY = ITEMS.register ("upgrade_vitality",
             () -> new UpgradePatternItem(new Item.Properties().attributes(ItemAttributeModifiers.builder()
-                    .add(Attributes.MAX_HEALTH, new AttributeModifier(ResourceLocation.fromNamespaceAndPath(DungeonTidbits.MOD_ID, "modified"), 4.0, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.ARMOR)
+                    .add(Attributes.MAX_HEALTH, new AttributeModifier(ResourceLocation.fromNamespaceAndPath(DungeonTidbits.MOD_ID, "modified"), 2.0, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.ARMOR)
                     .build())));
     public static final DeferredItem<Item> UPGRADE_UTILITY = ITEMS.register ("upgrade_utility",
             () -> new UpgradePatternItem(new Item.Properties().attributes(ItemAttributeModifiers.builder()
@@ -71,13 +71,13 @@ public class ModItems {
                     .build())));
 
     public static final DeferredItem<ArmorItem> REINFORCED_LEATHER_HELMET = ITEMS.register("reinforced_leather_helmet",
-            () -> new ArmorItem(ModArmorMaterials.REINFORCED_LEATHER, ArmorItem.Type.HELMET, new Item.Properties().durability(net.minecraft.world.item.ArmorItem.Type.HELMET.getDurability(5)+250)));
+            () -> new ArmorItem(ModArmorMaterials.REINFORCED_LEATHER, ArmorItem.Type.HELMET, new Item.Properties().durability(net.minecraft.world.item.ArmorItem.Type.HELMET.getDurability(5)+200)));
     public static final DeferredItem<ArmorItem> REINFORCED_LEATHER_CHESTPLATE = ITEMS.register("reinforced_leather_chestplate",
-            () -> new ArmorItem(ModArmorMaterials.REINFORCED_LEATHER, ArmorItem.Type.CHESTPLATE, new Item.Properties().durability(net.minecraft.world.item.ArmorItem.Type.HELMET.getDurability(5)+250)));
+            () -> new ArmorItem(ModArmorMaterials.REINFORCED_LEATHER, ArmorItem.Type.CHESTPLATE, new Item.Properties().durability(net.minecraft.world.item.ArmorItem.Type.HELMET.getDurability(5)+200)));
     public static final DeferredItem<ArmorItem> REINFORCED_LEATHER_LEGGINGS = ITEMS.register("reinforced_leather_leggings",
-            () -> new ArmorItem(ModArmorMaterials.REINFORCED_LEATHER, ArmorItem.Type.LEGGINGS, new Item.Properties().durability(net.minecraft.world.item.ArmorItem.Type.HELMET.getDurability(5)+250)));
+            () -> new ArmorItem(ModArmorMaterials.REINFORCED_LEATHER, ArmorItem.Type.LEGGINGS, new Item.Properties().durability(net.minecraft.world.item.ArmorItem.Type.HELMET.getDurability(5)+200)));
     public static final DeferredItem<ArmorItem> REINFORCED_LEATHER_BOOTS = ITEMS.register("reinforced_leather_boots",
-            () -> new ArmorItem(ModArmorMaterials.REINFORCED_LEATHER, ArmorItem.Type.BOOTS, new Item.Properties().durability(net.minecraft.world.item.ArmorItem.Type.HELMET.getDurability(5)+250)));
+            () -> new ArmorItem(ModArmorMaterials.REINFORCED_LEATHER, ArmorItem.Type.BOOTS, new Item.Properties().durability(net.minecraft.world.item.ArmorItem.Type.HELMET.getDurability(5)+200)));
 
     public static final DeferredItem<ArmorItem> FORTIFIED_LEATHER_HELMET = ITEMS.register("fortified_leather_helmet",
             () -> new ArmorItem(ModArmorMaterials.FORTIFIED_LEATHER, ArmorItem.Type.HELMET, new Item.Properties().durability(net.minecraft.world.item.ArmorItem.Type.HELMET.getDurability(5)+400)));
@@ -89,13 +89,13 @@ public class ModItems {
             () -> new ArmorItem(ModArmorMaterials.FORTIFIED_LEATHER, ArmorItem.Type.BOOTS, new Item.Properties().durability(net.minecraft.world.item.ArmorItem.Type.HELMET.getDurability(5)+400)));
 
     public static final DeferredItem<ArmorItem> REINFORCED_GOLDEN_HELMET = ITEMS.register("reinforced_golden_helmet",
-            () -> new ArmorItem(ModArmorMaterials.REINFORCED_GOLD, ArmorItem.Type.HELMET, new Item.Properties().durability(net.minecraft.world.item.ArmorItem.Type.HELMET.getDurability(7)+250)));
+            () -> new ArmorItem(ModArmorMaterials.REINFORCED_GOLD, ArmorItem.Type.HELMET, new Item.Properties().durability(net.minecraft.world.item.ArmorItem.Type.HELMET.getDurability(7)+100)));
     public static final DeferredItem<ArmorItem> REINFORCED_GOLDEN_CHESTPLATE = ITEMS.register("reinforced_golden_chestplate",
-            () -> new ArmorItem(ModArmorMaterials.REINFORCED_GOLD, ArmorItem.Type.CHESTPLATE, new Item.Properties().durability(net.minecraft.world.item.ArmorItem.Type.HELMET.getDurability(7)+250)));
+            () -> new ArmorItem(ModArmorMaterials.REINFORCED_GOLD, ArmorItem.Type.CHESTPLATE, new Item.Properties().durability(net.minecraft.world.item.ArmorItem.Type.HELMET.getDurability(7)+100)));
     public static final DeferredItem<ArmorItem> REINFORCED_GOLDEN_LEGGINGS = ITEMS.register("reinforced_golden_leggings",
-            () -> new ArmorItem(ModArmorMaterials.REINFORCED_GOLD, ArmorItem.Type.LEGGINGS, new Item.Properties().durability(net.minecraft.world.item.ArmorItem.Type.HELMET.getDurability(7)+250)));
+            () -> new ArmorItem(ModArmorMaterials.REINFORCED_GOLD, ArmorItem.Type.LEGGINGS, new Item.Properties().durability(net.minecraft.world.item.ArmorItem.Type.HELMET.getDurability(7)+100)));
     public static final DeferredItem<ArmorItem> REINFORCED_GOLDEN_BOOTS = ITEMS.register("reinforced_golden_boots",
-            () -> new ArmorItem(ModArmorMaterials.REINFORCED_GOLD, ArmorItem.Type.BOOTS, new Item.Properties().durability(net.minecraft.world.item.ArmorItem.Type.HELMET.getDurability(7)+250)));
+            () -> new ArmorItem(ModArmorMaterials.REINFORCED_GOLD, ArmorItem.Type.BOOTS, new Item.Properties().durability(net.minecraft.world.item.ArmorItem.Type.HELMET.getDurability(7)+100)));
 
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);

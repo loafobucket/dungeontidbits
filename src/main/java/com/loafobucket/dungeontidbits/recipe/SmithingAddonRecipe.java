@@ -1,5 +1,6 @@
 package com.loafobucket.dungeontidbits.recipe;
 
+import com.loafobucket.dungeontidbits.DungeonTidbits;
 import com.loafobucket.dungeontidbits.misc.ModTags;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -10,8 +11,10 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.crafting.*;
@@ -41,8 +44,21 @@ public class SmithingAddonRecipe implements SmithingRecipe {
         List<ItemAttributeModifiers.Entry> originalAttribute = input.base().getItem().getDefaultAttributeModifiers(input.base().copy()).modifiers();
         List<ItemAttributeModifiers.Entry> templateAttribute = input.template().copy().getAttributeModifiers().modifiers();
         int bonus = 1;
+        ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(DungeonTidbits.MOD_ID, "modified");
         if (!templateAttribute.isEmpty() && output.is(ModTags.Items.UPGRADE_MODIFIABLE)) {
             if (input.base().is(ModTags.Items.UPGRADE_DOUBLED)) {bonus = 2;}
+            switch (input.base().getItem()) {
+                case ArmorItem armorItem when armorItem.getType() == ArmorItem.Type.HELMET ->
+                        ID = ResourceLocation.fromNamespaceAndPath(DungeonTidbits.MOD_ID, "modified_helmet");
+                case ArmorItem armorItem when armorItem.getType() == ArmorItem.Type.CHESTPLATE ->
+                        ID = ResourceLocation.fromNamespaceAndPath(DungeonTidbits.MOD_ID, "modified_chestplate");
+                case ArmorItem armorItem when armorItem.getType() == ArmorItem.Type.LEGGINGS ->
+                        ID = ResourceLocation.fromNamespaceAndPath(DungeonTidbits.MOD_ID, "modified_leggings");
+                case ArmorItem armorItem when armorItem.getType() == ArmorItem.Type.BOOTS ->
+                        ID = ResourceLocation.fromNamespaceAndPath(DungeonTidbits.MOD_ID, "modified_boots");
+                default -> {
+                }
+            }
             output.remove(DataComponents.ATTRIBUTE_MODIFIERS);
             ItemAttributeModifiers modifier = ItemAttributeModifiers.EMPTY;
             for (ItemAttributeModifiers.Entry entry : originalAttribute) {
@@ -56,7 +72,7 @@ public class SmithingAddonRecipe implements SmithingRecipe {
             for (ItemAttributeModifiers.Entry entry : templateAttribute) {
                 modifier = modifier.withModifierAdded(
                         entry.attribute(),
-                        new AttributeModifier(entry.modifier().id(),
+                        new AttributeModifier(ID,
                                 entry.modifier().amount() * bonus,
                                 entry.modifier().operation()),
                         EquipmentSlotGroup.ARMOR);
